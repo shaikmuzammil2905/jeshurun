@@ -323,7 +323,7 @@
           </div>
           <div class="why-grid grid grid-4-col">
             <div class="why-card">
-              <div class="why-icon red-bg"><i class="fa-solid fa-shield-check"></i></div>
+              <div class="why-icon red-bg"><i class="fa-solid fa-shield-halved"></i></div>
               <h3>Quality Construction</h3>
               <p>Only premium materials and proven engineering standards are applied to build solid, durable architectural structures.</p>
             </div>
@@ -434,34 +434,34 @@
           </div>
           <div class="gallery-filters-row">
             <button class="filter-btn active" data-filter="all">All</button>
-            <button class="filter-btn" data-filter="residential">Residential</button>
-            <button class="filter-btn" data-filter="commercial">Commercial</button>
-            <button class="filter-btn" data-filter="interior">Interior</button>
-            <button class="filter-btn" data-filter="progress">Construction Progress</button>
-            <button class="filter-btn" data-filter="completed">Completed Projects</button>
+            <button class="filter-btn" data-filter="gallery-residential">Residential</button>
+            <button class="filter-btn" data-filter="gallery-commercial">Commercial</button>
+            <button class="filter-btn" data-filter="gallery-interior">Interior</button>
+            <button class="filter-btn" data-filter="gallery-progress">Construction Progress</button>
+            <button class="filter-btn" data-filter="gallery-completed">Completed Projects</button>
           </div>
           <div class="gallery-grid">
-            <div class="gallery-item" data-category="residential">
+            <div class="gallery-item" data-category="gallery-residential">
               <img src="https://images.unsplash.com/photo-1613490493576-7fde63acd811?auto=format&fit=crop&w=400&q=80" alt="Villa exterior">
               <div class="gallery-item-hover"><i class="fa-solid fa-magnifying-glass-plus"></i></div>
             </div>
-            <div class="gallery-item" data-category="commercial">
+            <div class="gallery-item" data-category="gallery-commercial">
               <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=400&q=80" alt="Glass facade commercial">
               <div class="gallery-item-hover"><i class="fa-solid fa-magnifying-glass-plus"></i></div>
             </div>
-            <div class="gallery-item" data-category="interior">
+            <div class="gallery-item" data-category="gallery-interior">
               <img src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=400&q=80" alt="Living room decor">
               <div class="gallery-item-hover"><i class="fa-solid fa-magnifying-glass-plus"></i></div>
             </div>
-            <div class="gallery-item" data-category="progress">
+            <div class="gallery-item" data-category="gallery-progress">
               <img src="https://images.unsplash.com/photo-1541888946425-d81bb19240f5?auto=format&fit=crop&w=400&q=80" alt="Foundation concrete pouring">
               <div class="gallery-item-hover"><i class="fa-solid fa-magnifying-glass-plus"></i></div>
             </div>
-            <div class="gallery-item" data-category="completed">
+            <div class="gallery-item" data-category="gallery-completed">
               <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=400&q=80" alt="Completed building project">
               <div class="gallery-item-hover"><i class="fa-solid fa-magnifying-glass-plus"></i></div>
             </div>
-            <div class="gallery-item" data-category="residential">
+            <div class="gallery-item" data-category="gallery-residential">
               <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=400&q=80" alt="Luxury home exterior">
               <div class="gallery-item-hover"><i class="fa-solid fa-magnifying-glass-plus"></i></div>
             </div>
@@ -537,15 +537,17 @@
             </div>
             <!-- Right Map -->
             <div class="contact-map-col">
-              <div class="map-link-wrapper" id="home-map-trigger">
-                <div class="map-overlay">
-                  <div class="map-marker-pin"><i class="fa-solid fa-location-dot"></i></div>
-                  <div class="map-marker-info">
-                    <h5>Jeshurun Builder's & Developer's</h5>
-                    <p>Click to open Google Maps</p>
-                  </div>
-                </div>
-                <img src="https://images.unsplash.com/photo-1524661135-423995f22d0b?auto=format&fit=crop&w=600&q=80" alt="Map outline" class="map-mockup-bg">
+              <div class="map-link-wrapper" id="home-map-trigger" style="height: 100%;">
+                <iframe 
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3807.1325763071375!2d78.45524317587747!3d17.405445202359556!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bcb973e659b85c1%3A0xb245cdbe19138407!2sSomajiguda%2C%20Hyderabad%2C%20Telangana!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin" 
+                  width="100%" 
+                  height="100%" 
+                  style="border:0; min-height: 350px;" 
+                  allowfullscreen="" 
+                  loading="lazy" 
+                  referrerpolicy="no-referrer-when-downgrade"
+                  class="contact-embed-iframe">
+                </iframe>
               </div>
             </div>
           </div>
@@ -978,7 +980,7 @@
       </section>
     </section>
 
-    <!-- GALLERY VIEW -->
+    <!-- MAIN GALLERY VIEW -->
     <section id="gallery-view" class="view-section">
       <div class="subpage-banner" style="background-image: linear-gradient(rgba(11, 26, 48, 0.75), rgba(11, 26, 48, 0.8)), url('https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=1200&q=80');">
         <div class="container subpage-banner-content">
@@ -991,50 +993,190 @@
       <section class="section subpage-gallery-section">
         <div class="container">
           <div class="gallery-filters-row" id="gallery-view-filters">
-            <button class="filter-btn active" data-filter="all">All</button>
-            <button class="filter-btn" data-filter="residential">Residential</button>
-            <button class="filter-btn" data-filter="commercial">Commercial</button>
-            <button class="filter-btn" data-filter="interior">Interior</button>
-            <button class="filter-btn" data-filter="progress">Construction Progress</button>
-            <button class="filter-btn" data-filter="completed">Completed Projects</button>
+            <button class="filter-btn active" data-filter="all">All Portfolio</button>
+            <button class="filter-btn" data-filter="gallery-residential">Residential</button>
+            <button class="filter-btn" data-filter="gallery-commercial">Commercial</button>
+            <button class="filter-btn" data-filter="gallery-interior">Interior</button>
+            <button class="filter-btn" data-filter="gallery-progress">Construction Progress</button>
+            <button class="filter-btn" data-filter="gallery-completed">Completed Projects</button>
           </div>
+          
           <div class="gallery-grid" id="gallery-view-grid">
-            <div class="gallery-item" data-category="residential">
+            <div class="gallery-item" data-category="gallery-residential">
               <img src="https://images.unsplash.com/photo-1613490493576-7fde63acd811?auto=format&fit=crop&w=600&q=80" alt="Villa front elevation">
               <div class="gallery-item-hover"><i class="fa-solid fa-magnifying-glass-plus"></i></div>
             </div>
-            <div class="gallery-item" data-category="commercial">
+            <div class="gallery-item" data-category="gallery-commercial">
               <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=600&q=80" alt="Office glass construction">
               <div class="gallery-item-hover"><i class="fa-solid fa-magnifying-glass-plus"></i></div>
             </div>
-            <div class="gallery-item" data-category="interior">
+            <div class="gallery-item" data-category="gallery-interior">
               <img src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=600&q=80" alt="Modern lounge interior">
               <div class="gallery-item-hover"><i class="fa-solid fa-magnifying-glass-plus"></i></div>
             </div>
-            <div class="gallery-item" data-category="progress">
+            <div class="gallery-item" data-category="gallery-progress">
               <img src="https://images.unsplash.com/photo-1541888946425-d81bb19240f5?auto=format&fit=crop&w=600&q=80" alt="Concrete rebar pillars">
               <div class="gallery-item-hover"><i class="fa-solid fa-magnifying-glass-plus"></i></div>
             </div>
-            <div class="gallery-item" data-category="completed">
+            <div class="gallery-item" data-category="gallery-completed">
               <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=600&q=80" alt="Villa landscape view">
               <div class="gallery-item-hover"><i class="fa-solid fa-magnifying-glass-plus"></i></div>
             </div>
-            <div class="gallery-item" data-category="residential">
+            <div class="gallery-item" data-category="gallery-residential">
               <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=600&q=80" alt="Dusk residential facade">
               <div class="gallery-item-hover"><i class="fa-solid fa-magnifying-glass-plus"></i></div>
             </div>
-            <div class="gallery-item" data-category="interior">
+          </div>
+        </div>
+      </section>
+    </section>
+
+    <!-- DEDICATED GALLERY SUB-PAGES (VIRTUAL VIEWS) -->
+    
+    <!-- Residential subpage -->
+    <section id="gallery-residential-view" class="view-section">
+      <div class="subpage-banner" style="background-image: linear-gradient(rgba(11, 26, 48, 0.75), rgba(11, 26, 48, 0.8)), url('https://images.unsplash.com/photo-1613490493576-7fde63acd811?auto=format&fit=crop&w=1200&q=80');">
+        <div class="container subpage-banner-content">
+          <span class="subpage-breadcrumbs">Home > Gallery > Residential</span>
+          <h1>Residential Projects</h1>
+          <p>Custom luxury villas, premium duplex houses, and high-rise apartments built to exceed benchmarks.</p>
+        </div>
+      </div>
+      <section class="section">
+        <div class="container">
+          <p class="section-lead text-center max-width-md">Our residential division blends architectural elegance with core civil-engineering safety standards, creating durable living spaces that reflect custom client requirements.</p>
+          <div class="gallery-grid" style="margin-top: 40px;">
+            <div class="gallery-item" data-category="gallery-residential">
+              <img src="https://images.unsplash.com/photo-1613490493576-7fde63acd811?auto=format&fit=crop&w=600&q=80" alt="Villa exterior">
+              <div class="gallery-item-hover"><i class="fa-solid fa-magnifying-glass-plus"></i></div>
+            </div>
+            <div class="gallery-item" data-category="gallery-residential">
+              <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=600&q=80" alt="Dusk residential elevation">
+              <div class="gallery-item-hover"><i class="fa-solid fa-magnifying-glass-plus"></i></div>
+            </div>
+            <div class="gallery-item" data-category="gallery-residential">
+              <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=600&q=80" alt="Completed luxury villa">
+              <div class="gallery-item-hover"><i class="fa-solid fa-magnifying-glass-plus"></i></div>
+            </div>
+          </div>
+          <div class="text-center" style="margin-top: 50px;">
+            <a href="#gallery" class="btn btn-outline"><i class="fa-solid fa-arrow-left"></i> Back to Gallery</a>
+          </div>
+        </div>
+      </section>
+    </section>
+
+    <!-- Commercial subpage -->
+    <section id="gallery-commercial-view" class="view-section">
+      <div class="subpage-banner" style="background-image: linear-gradient(rgba(11, 26, 48, 0.75), rgba(11, 26, 48, 0.8)), url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1200&q=80');">
+        <div class="container subpage-banner-content">
+          <span class="subpage-breadcrumbs">Home > Gallery > Commercial</span>
+          <h1>Commercial Construction</h1>
+          <p>State-of-the-art office spaces, corporate complexes, and commercial plazas designed for business excellence.</p>
+        </div>
+      </div>
+      <section class="section">
+        <div class="container">
+          <p class="section-lead text-center max-width-md">We engineer structural frameworks and facades built to sustain heavy corporate operations, optimizing space utility, security, and utility integrations.</p>
+          <div class="gallery-grid" style="margin-top: 40px;">
+            <div class="gallery-item" data-category="gallery-commercial">
+              <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=600&q=80" alt="Office glass construction">
+              <div class="gallery-item-hover"><i class="fa-solid fa-magnifying-glass-plus"></i></div>
+            </div>
+            <div class="gallery-item" data-category="gallery-commercial">
+              <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=600&q=80" alt="Modern corporate headquarters">
+              <div class="gallery-item-hover"><i class="fa-solid fa-magnifying-glass-plus"></i></div>
+            </div>
+          </div>
+          <div class="text-center" style="margin-top: 50px;">
+            <a href="#gallery" class="btn btn-outline"><i class="fa-solid fa-arrow-left"></i> Back to Gallery</a>
+          </div>
+        </div>
+      </section>
+    </section>
+
+    <!-- Interior subpage -->
+    <section id="gallery-interior-view" class="view-section">
+      <div class="subpage-banner" style="background-image: linear-gradient(rgba(11, 26, 48, 0.75), rgba(11, 26, 48, 0.8)), url('https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=1200&q=80');">
+        <div class="container subpage-banner-content">
+          <span class="subpage-breadcrumbs">Home > Gallery > Interior</span>
+          <h1>Interior Solutions</h1>
+          <p>Visually aesthetic, highly functional living rooms, modular kitchens, and corporate lobby designs.</p>
+        </div>
+      </div>
+      <section class="section">
+        <div class="container">
+          <p class="section-lead text-center max-width-md">Combining custom woodworking, ambient lighting grids, acoustic settings, and partition layouts to make interior spaces feel exceptionally luxurious.</p>
+          <div class="gallery-grid" style="margin-top: 40px;">
+            <div class="gallery-item" data-category="gallery-interior">
+              <img src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=600&q=80" alt="Modern lounge interior">
+              <div class="gallery-item-hover"><i class="fa-solid fa-magnifying-glass-plus"></i></div>
+            </div>
+            <div class="gallery-item" data-category="gallery-interior">
               <img src="https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=600&q=80" alt="Living room setting">
               <div class="gallery-item-hover"><i class="fa-solid fa-magnifying-glass-plus"></i></div>
             </div>
-            <div class="gallery-item" data-category="progress">
+          </div>
+          <div class="text-center" style="margin-top: 50px;">
+            <a href="#gallery" class="btn btn-outline"><i class="fa-solid fa-arrow-left"></i> Back to Gallery</a>
+          </div>
+        </div>
+      </section>
+    </section>
+
+    <!-- Construction Progress subpage -->
+    <section id="gallery-progress-view" class="view-section">
+      <div class="subpage-banner" style="background-image: linear-gradient(rgba(11, 26, 48, 0.75), rgba(11, 26, 48, 0.8)), url('https://images.unsplash.com/photo-1541888946425-d81bb19240f5?auto=format&fit=crop&w=1200&q=80');">
+        <div class="container subpage-banner-content">
+          <span class="subpage-breadcrumbs">Home > Gallery > Construction Progress</span>
+          <h1>Construction Progress</h1>
+          <p>Real-time site updates, steel reinforcement layups, and foundation castings in Hyderabad.</p>
+        </div>
+      </div>
+      <section class="section">
+        <div class="container">
+          <p class="section-lead text-center max-width-md">Witness the technical stages of raw building, checking concrete quality benchmarks, steel rebar testing, and safety controls during operational periods.</p>
+          <div class="gallery-grid" style="margin-top: 40px;">
+            <div class="gallery-item" data-category="gallery-progress">
+              <img src="https://images.unsplash.com/photo-1541888946425-d81bb19240f5?auto=format&fit=crop&w=600&q=80" alt="Concrete rebar pillars">
+              <div class="gallery-item-hover"><i class="fa-solid fa-magnifying-glass-plus"></i></div>
+            </div>
+            <div class="gallery-item" data-category="gallery-progress">
               <img src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=600&q=80" alt="Tower crane construction site">
               <div class="gallery-item-hover"><i class="fa-solid fa-magnifying-glass-plus"></i></div>
             </div>
-            <div class="gallery-item" data-category="completed">
+          </div>
+          <div class="text-center" style="margin-top: 50px;">
+            <a href="#gallery" class="btn btn-outline"><i class="fa-solid fa-arrow-left"></i> Back to Gallery</a>
+          </div>
+        </div>
+      </section>
+    </section>
+
+    <!-- Completed Projects subpage -->
+    <section id="gallery-completed-view" class="view-section">
+      <div class="subpage-banner" style="background-image: linear-gradient(rgba(11, 26, 48, 0.75), rgba(11, 26, 48, 0.8)), url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80');">
+        <div class="container subpage-banner-content">
+          <span class="subpage-breadcrumbs">Home > Gallery > Completed Projects</span>
+          <h1>Completed Projects</h1>
+          <p>Delivered architectural testaments combining engineering safety compliance with visual luxury.</p>
+        </div>
+      </div>
+      <section class="section">
+        <div class="container">
+          <p class="section-lead text-center max-width-md">Explore our finished corporate centers and residential villas handed over with all administrative clearances and snag checks cleared.</p>
+          <div class="gallery-grid" style="margin-top: 40px;">
+            <div class="gallery-item" data-category="gallery-completed">
+              <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=600&q=80" alt="Villa landscape view">
+              <div class="gallery-item-hover"><i class="fa-solid fa-magnifying-glass-plus"></i></div>
+            </div>
+            <div class="gallery-item" data-category="gallery-completed">
               <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=600&q=80" alt="Modern corporate lobby">
               <div class="gallery-item-hover"><i class="fa-solid fa-magnifying-glass-plus"></i></div>
             </div>
+          </div>
+          <div class="text-center" style="margin-top: 50px;">
+            <a href="#gallery" class="btn btn-outline"><i class="fa-solid fa-arrow-left"></i> Back to Gallery</a>
           </div>
         </div>
       </section>
@@ -1143,14 +1285,6 @@
       <!-- Google Maps integration -->
       <section class="contact-map-iframe-section">
         <div class="map-link-wrapper" id="subpage-map-trigger" style="height: 450px;">
-          <div class="map-overlay">
-            <div class="map-marker-pin"><i class="fa-solid fa-location-dot"></i></div>
-            <div class="map-marker-info">
-              <h5>Jeshurun Builder's & Developer's</h5>
-              <p>Vidyanagar, Hyderabad</p>
-              <p>Click to open Navigation Route</p>
-            </div>
-          </div>
           <iframe 
             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3807.1325763071375!2d78.45524317587747!3d17.405445202359556!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bcb973e659b85c1%3A0xb245cdbe19138407!2sSomajiguda%2C%20Hyderabad%2C%20Telangana!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin" 
             width="100%" 

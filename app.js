@@ -24,7 +24,12 @@ document.addEventListener('DOMContentLoaded', () => {
       'projects': 'projects-view',
       'services': 'services-view',
       'gallery': 'gallery-view',
-      'contact': 'contact-view'
+      'contact': 'contact-view',
+      'gallery-residential': 'gallery-residential-view',
+      'gallery-commercial': 'gallery-commercial-view',
+      'gallery-interior': 'gallery-interior-view',
+      'gallery-progress': 'gallery-progress-view',
+      'gallery-completed': 'gallery-completed-view'
     };
 
     const activeViewId = routeMap[route] || 'home-view';
@@ -65,7 +70,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const links = document.querySelectorAll('.desktop-nav .nav-link, .mobile-nav-links .mobile-nav-link, .mobile-bottom-nav .bottom-nav-item');
     links.forEach(link => {
       const dataView = link.getAttribute('data-view');
-      if (dataView === route) {
+      const normalizedView = route.startsWith('gallery-') ? 'gallery' : route;
+      if (dataView === normalizedView) {
         link.classList.add('active');
       } else {
         link.classList.remove('active');
@@ -80,7 +86,11 @@ document.addEventListener('DOMContentLoaded', () => {
       const href = link.getAttribute('href');
       if (href && href.startsWith('#') && href.length > 1) {
         const targetView = href.replace('#', '');
-        const validRoutes = { 'home': 1, 'about': 1, 'projects': 1, 'services': 1, 'gallery': 1, 'contact': 1 };
+        const validRoutes = { 
+          'home': 1, 'about': 1, 'projects': 1, 'services': 1, 'gallery': 1, 'contact': 1,
+          'gallery-residential': 1, 'gallery-commercial': 1, 'gallery-interior': 1,
+          'gallery-progress': 1, 'gallery-completed': 1
+        };
         
         if (targetView in validRoutes) {
           e.preventDefault();
@@ -583,25 +593,53 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
   // ==========================================================================
-  // 8. CATEGORY FILTERS
+  // 8. DEDICATED GALLERY SUBPAGE REDIRECTS (PHASE 3)
   // ==========================================================================
-  function setupFilterSystem(filterContainerId, gridContainerSelector, itemSelector) {
-    const filterRow = document.getElementById(filterContainerId);
+  function setupGalleryRedirectFilters() {
+    const filterButtons = document.querySelectorAll('.gallery-filters-row .filter-btn');
+    
+    filterButtons.forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const filterVal = e.target.getAttribute('data-filter');
+        
+        // Skip projects view filters
+        const parentFilterRow = e.target.closest('.gallery-filters-row');
+        if (parentFilterRow && parentFilterRow.id === 'projects-view-filters') {
+          return; // projects filter handles standard css filter block
+        }
+
+        if (filterVal && filterVal.startsWith('gallery-')) {
+          e.preventDefault();
+          history.pushState(null, null, `#${filterVal}`);
+          router(`#${filterVal}`);
+        } else if (filterVal === 'all') {
+          e.preventDefault();
+          history.pushState(null, null, '#gallery');
+          router('#gallery');
+        }
+      });
+    });
+  }
+
+  setupGalleryRedirectFilters();
+
+  // Helper projects page normal CSS filter handler
+  function setupProjectsFilterSystem() {
+    const filterRow = document.getElementById('projects-view-filters');
     if (!filterRow) return;
 
     const filterButtons = filterRow.querySelectorAll('.filter-btn');
-    
     filterButtons.forEach(btn => {
       btn.addEventListener('click', (e) => {
         filterButtons.forEach(b => b.classList.remove('active'));
         e.target.classList.add('active');
 
         const filterValue = e.target.getAttribute('data-filter');
-        const items = document.querySelectorAll(gridContainerSelector + ' ' + itemSelector);
+        const items = document.querySelectorAll('.projects-grid .project-card');
 
         items.forEach(item => {
           const itemCategory = item.getAttribute('data-category');
-          if (filterValue === 'all' || itemCategory === filterValue || item.getAttribute('data-project') === filterValue) {
+          if (filterValue === 'all' || itemCategory === filterValue) {
             item.style.display = 'block';
             item.style.animation = 'viewFadeIn 0.3s ease forwards';
           } else {
@@ -612,8 +650,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  setupFilterSystem('gallery-view-filters', '#gallery-view-grid', '.gallery-item');
-  setupFilterSystem('projects-view-filters', '.projects-grid', '.project-card');
+  setupProjectsFilterSystem();
 
 
   // ==========================================================================
@@ -662,8 +699,11 @@ document.addEventListener('DOMContentLoaded', () => {
   // ==========================================================================
   const mapTriggers = document.querySelectorAll('#home-map-trigger, #subpage-map-trigger');
   mapTriggers.forEach(trigger => {
-    trigger.addEventListener('click', () => {
-      window.open('https://maps.app.goo.gl/3NbPbWttGBSjQ692A', '_blank');
+    trigger.addEventListener('click', (e) => {
+      // Allow user to click iframe controls naturally. If they click surrounding parent layout, redirect.
+      if (e.target.tagName !== 'IFRAME') {
+        window.open('https://maps.app.goo.gl/3NbPbWttGBSjQ692A', '_blank');
+      }
     });
   });
 
@@ -737,11 +777,11 @@ document.addEventListener('DOMContentLoaded', () => {
     item.addEventListener('click', () => {
       const cat = item.getAttribute('data-category');
       const projectMap = {
-        'residential': 'luxury-villa',
-        'commercial': 'commercial-complex',
-        'interior': 'corporate-hq',
-        'progress': 'luxury-penthouses',
-        'completed': 'modern-residence'
+        'gallery-residential': 'luxury-villa',
+        'gallery-commercial': 'commercial-complex',
+        'gallery-interior': 'corporate-hq',
+        'gallery-progress': 'luxury-penthouses',
+        'gallery-completed': 'modern-residence'
       };
       const prjId = projectMap[cat] || 'luxury-villa';
       openProjectLightbox(prjId);
