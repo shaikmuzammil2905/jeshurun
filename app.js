@@ -23,6 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
       'about': 'about-view',
       'projects': 'projects-view',
       'services': 'services-view',
+      'brochure': 'brochure-view',
       'gallery': 'gallery-view',
       'contact': 'contact-view',
       'gallery-residential': 'gallery-residential-view',
@@ -87,7 +88,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (href && href.startsWith('#') && href.length > 1) {
         const targetView = href.replace('#', '');
         const validRoutes = { 
-          'home': 1, 'about': 1, 'projects': 1, 'services': 1, 'gallery': 1, 'contact': 1,
+          'home': 1, 'about': 1, 'projects': 1, 'services': 1, 'brochure': 1, 'gallery': 1, 'contact': 1,
           'gallery-residential': 1, 'gallery-commercial': 1, 'gallery-interior': 1,
           'gallery-progress': 1, 'gallery-completed': 1
         };
@@ -787,5 +788,61 @@ document.addEventListener('DOMContentLoaded', () => {
       openProjectLightbox(prjId);
     });
   });
+
+  // ==========================================================================
+  // 14. BROCHURE SLIDER LOGIC
+  // ==========================================================================
+  let currentBrochureSlide = 0;
+  const brochureSlides = document.querySelectorAll('.brochure-slide');
+  const brochureDots = document.querySelectorAll('.brochure-dot');
+  const prevBrochureBtn = document.querySelector('.brochure-prev');
+  const nextBrochureBtn = document.querySelector('.brochure-next');
+  
+  function showBrochureSlide(idx) {
+    if (brochureSlides.length === 0) return;
+    
+    brochureSlides.forEach((slide, i) => {
+      slide.classList.remove('active');
+      if (brochureDots[i]) brochureDots[i].classList.remove('active');
+    });
+    
+    currentBrochureSlide = (idx + brochureSlides.length) % brochureSlides.length;
+    brochureSlides[currentBrochureSlide].classList.add('active');
+    if (brochureDots[currentBrochureSlide]) brochureDots[currentBrochureSlide].classList.add('active');
+    
+    const activeSlide = brochureSlides[currentBrochureSlide];
+    activeSlide.scrollTop = 0;
+  }
+  
+  if (brochureSlides.length > 0) {
+    if (nextBrochureBtn) {
+      nextBrochureBtn.addEventListener('click', () => {
+        showBrochureSlide(currentBrochureSlide + 1);
+      });
+    }
+    if (prevBrochureBtn) {
+      prevBrochureBtn.addEventListener('click', () => {
+        showBrochureSlide(currentBrochureSlide - 1);
+      });
+    }
+    brochureDots.forEach((dot, i) => {
+      dot.addEventListener('click', () => {
+        showBrochureSlide(i);
+      });
+    });
+    
+    document.addEventListener('keydown', (e) => {
+      const brochureView = document.getElementById('brochure-view');
+      if (brochureView && brochureView.classList.contains('active')) {
+        if (e.key === 'ArrowRight') {
+          showBrochureSlide(currentBrochureSlide + 1);
+        } else if (e.key === 'ArrowLeft') {
+          showBrochureSlide(currentBrochureSlide - 1);
+        }
+      }
+    });
+    
+    showBrochureSlide(0);
+  }
 
 });

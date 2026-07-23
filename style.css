@@ -251,7 +251,7 @@ iframe {
 .brand-logo {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 6px;
 }
 
 .brand-text {
@@ -2381,12 +2381,12 @@ select.form-input {
   }
   
   .hero-slider-container {
-    height: 480px;
+    height: 540px;
   }
   
   .hero-content {
     margin-left: 0;
-    padding: 24px;
+    padding: 96px 24px 24px 24px;
     text-align: center;
   }
   
@@ -2595,4 +2595,304 @@ select.form-input {
 
 .project-action-btn {
   flex-shrink: 0 !important;
+}
+
+/* ==========================================================================
+   BROCHURE VIEW STYLING
+   ========================================================================== */
+.brochure-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 24px;
+}
+
+.brochure-slider-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 960px;
+  height: 680px;
+  margin: 0 auto;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+  background-color: var(--secondary-blue);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.brochure-slide {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.8s ease, visibility 0.8s ease;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.brochure-slide.active {
+  opacity: 1;
+  visibility: visible;
+  z-index: 2;
+}
+
+/* Image-based slides */
+.brochure-img-fit {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  background-color: var(--secondary-blue);
+}
+
+/* Slide 3: Team Album Slide */
+.brochure-team-slide {
+  background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+  padding: 30px;
+  overflow-y: auto;
+  justify-content: flex-start;
+}
+
+.brochure-team-title {
+  font-size: 2.2rem;
+  color: var(--secondary-blue);
+  margin-bottom: 25px;
+  text-align: center;
+  font-family: var(--font-headings);
+  width: 100%;
+}
+
+.brochure-team-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  width: 100%;
+  max-width: 880px;
+}
+
+.brochure-team-card {
+  background: var(--bg-white);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+  border: 2px solid #000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  transition: transform 0.3s ease;
+}
+
+.brochure-team-card:hover {
+  transform: translateY(-5px);
+}
+
+.brochure-team-img-wrapper {
+  width: 100%;
+  aspect-ratio: 1;
+  overflow: hidden;
+  border-bottom: 2px solid #000;
+}
+
+.brochure-team-img-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.brochure-team-body {
+  padding: 12px 10px;
+  width: 100%;
+}
+
+.brochure-team-body h4 {
+  font-size: 1.05rem;
+  margin-bottom: 4px;
+  font-family: var(--font-body);
+  font-weight: 700;
+  color: var(--text-dark);
+}
+
+.brochure-team-body p {
+  font-size: 0.9rem;
+  color: var(--secondary-blue);
+}
+
+.brochure-team-body p strong {
+  font-weight: 800;
+}
+
+/* Slide 4-8: Spec slides */
+.brochure-spec-slide {
+  background: radial-gradient(circle at center, #152a4a 0%, #081223 100%);
+  padding: 40px;
+  color: var(--bg-white);
+  overflow-y: auto;
+  justify-content: flex-start;
+  align-items: stretch;
+}
+
+.brochure-spec-header {
+  border-bottom: 2px solid var(--primary-red);
+  padding-bottom: 12px;
+  margin-bottom: 20px;
+}
+
+.brochure-spec-header h2 {
+  color: var(--bg-white);
+  font-size: 1.8rem;
+  font-family: var(--font-headings);
+}
+
+.brochure-spec-header p {
+  color: var(--accent-cyan);
+  font-size: 0.95rem;
+  margin-top: 4px;
+}
+
+.brochure-spec-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+}
+
+.brochure-spec-box {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 6px;
+  padding: 16px 20px;
+}
+
+.brochure-spec-box h3 {
+  font-size: 1.15rem;
+  color: var(--bg-white);
+  background-color: var(--primary-red);
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 3px;
+  margin-bottom: 12px;
+  font-weight: 700;
+}
+
+.brochure-spec-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.brochure-spec-list li {
+  font-size: 0.92rem;
+  line-height: 1.5;
+  margin-bottom: 8px;
+  position: relative;
+  padding-left: 18px;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.brochure-spec-list li::before {
+  content: "•";
+  color: var(--accent-cyan);
+  font-size: 1.3rem;
+  position: absolute;
+  left: 0;
+  top: -2px;
+}
+
+/* Slider arrows and indicators */
+.brochure-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: var(--bg-white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+  transition: var(--transition-smooth);
+}
+
+.brochure-arrow:hover {
+  background-color: var(--primary-red);
+  border-color: var(--primary-red);
+  transform: translateY(-50%) scale(1.1);
+}
+
+.brochure-prev { left: 16px; }
+.brochure-next { right: 16px; }
+
+.brochure-dots-container {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 20px;
+}
+
+.brochure-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: rgba(11, 26, 48, 0.2);
+  cursor: pointer;
+  transition: var(--transition-smooth);
+}
+
+.brochure-dot.active {
+  background-color: var(--primary-red);
+  transform: scale(1.2);
+}
+
+/* Animations for slides */
+.brochure-slide.active .animated-fit-in {
+  animation: slideInUpFit 0.8s ease forwards;
+}
+
+@keyframes slideInUpFit {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .brochure-slider-wrapper {
+    height: 520px;
+  }
+  
+  .brochure-team-grid {
+    grid-template-columns: 1fr;
+    max-height: 420px;
+    overflow-y: auto;
+    padding-right: 5px;
+  }
+  
+  .brochure-spec-grid {
+    grid-template-columns: 1fr;
+    max-height: 420px;
+    overflow-y: auto;
+    padding-right: 5px;
+  }
+  
+  .brochure-arrow {
+    width: 36px;
+    height: 36px;
+  }
+  
+  .brochure-prev { left: 8px; }
+  .brochure-next { right: 8px; }
 }
