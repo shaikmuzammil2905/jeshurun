@@ -327,6 +327,8 @@ iframe {
   padding: 8px 16px;
   border-radius: 50px;
   border: 1px solid rgba(11, 26, 48, 0.1);
+  flex-shrink: 0;
+  white-space: nowrap;
 }
 
 .header-call-btn .call-icon {
@@ -565,6 +567,20 @@ iframe {
   gap: 8px;
   font-weight: 600;
   font-size: 0.95rem;
+  background-color: rgba(11, 26, 48, 0.75);
+  color: var(--bg-white);
+  padding: 8px 18px;
+  border-radius: 50px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(5px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: var(--transition-smooth);
+}
+
+.hero-bottom-call a:hover {
+  background-color: var(--primary-red);
+  border-color: var(--primary-red);
+  transform: translateY(-2px);
 }
 
 .hero-bottom-call i {
@@ -2319,6 +2335,15 @@ select.form-input {
 /* ==========================================================================
    RESPONSIVE DESIGN (MEDIA QUERIES)
    ========================================================================== */
+@media (max-width: 1200px) {
+  .desktop-nav ul {
+    gap: 12px;
+  }
+  .header-container {
+    gap: 15px;
+  }
+}
+
 @media (max-width: 1024px) {
   .hero-slider-container { height: 500px; }
   .hero-title { font-size: 2.8rem; }
@@ -2679,24 +2704,25 @@ select.form-input {
   background: var(--bg-white);
   border-radius: 8px;
   overflow: hidden;
-  box-shadow: var(--shadow-md);
-  border: 2px solid #000;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid rgba(11, 26, 48, 0.08);
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
-  transition: transform 0.3s ease;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .brochure-team-card:hover {
   transform: translateY(-5px);
+  box-shadow: var(--shadow-lg);
 }
 
 .brochure-team-img-wrapper {
   width: 100%;
   aspect-ratio: 1;
   overflow: hidden;
-  border-bottom: 2px solid #000;
+  border-bottom: 1px solid rgba(11, 26, 48, 0.08);
 }
 
 .brochure-team-img-wrapper img {
@@ -2875,10 +2901,36 @@ select.form-input {
   }
   
   .brochure-team-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 10px !important;
     max-height: 420px;
     overflow-y: auto;
     padding-right: 5px;
+  }
+  
+  .brochure-team-card {
+    flex-shrink: 0 !important;
+    min-height: 165px !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05) !important;
+  }
+  
+  .brochure-team-img-wrapper {
+    height: 105px !important;
+    aspect-ratio: auto !important;
+  }
+  
+  .brochure-team-body {
+    padding: 6px 8px !important;
+  }
+  
+  .brochure-team-body p {
+    font-size: 0.7rem !important;
+    margin-bottom: 2px !important;
+  }
+  
+  .brochure-team-body h4 {
+    font-size: 0.85rem !important;
+    line-height: 1.2 !important;
   }
   
   .brochure-spec-grid {
