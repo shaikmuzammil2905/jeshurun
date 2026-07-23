@@ -2404,6 +2404,15 @@ select.form-input {
     gap: 12px;
   }
   
+  .slider-dots {
+    bottom: 12px !important;
+  }
+  
+  .hero-bottom-call {
+    margin-top: 15px !important;
+    margin-bottom: 25px !important;
+  }
+  
   .prev-arrow, .next-arrow {
     display: none;
   }

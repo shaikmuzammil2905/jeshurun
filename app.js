@@ -702,7 +702,7 @@ document.addEventListener('DOMContentLoaded', () => {
     trigger.addEventListener('click', (e) => {
       // Allow user to click iframe controls naturally. If they click surrounding parent layout, redirect.
       if (e.target.tagName !== 'IFRAME') {
-        window.open('https://maps.app.goo.gl/3NbPbWttGBSjQ692A', '_blank');
+        window.open('https://maps.app.goo.gl/dpBjjL83bfsHhqVQ6', '_blank');
       }
     });
   });
