@@ -2929,6 +2929,13 @@ select.form-input {
     justify-content: flex-start !important;
     align-items: center !important;
     padding: 30px 15px 50px 15px !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+  
+  .brochure-team-slide, .brochure-spec-slide {
+    height: auto !important;
+    overflow: visible !important;
   }
   
   .brochure-team-grid {
