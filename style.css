@@ -2728,7 +2728,7 @@ select.form-input {
 
 .brochure-team-img-wrapper {
   width: 100%;
-  aspect-ratio: 1;
+  aspect-ratio: 4 / 5;
   overflow: hidden;
   border-bottom: 1px solid rgba(11, 26, 48, 0.08);
 }
@@ -2737,6 +2737,7 @@ select.form-input {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: center 15%;
 }
 
 .brochure-team-body {
@@ -2948,13 +2949,17 @@ select.form-input {
   
   .brochure-team-card {
     flex-shrink: 0 !important;
-    min-height: 165px !important;
+    min-height: 235px !important;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05) !important;
   }
   
   .brochure-team-img-wrapper {
-    height: 105px !important;
+    height: 165px !important;
     aspect-ratio: auto !important;
+  }
+  
+  .brochure-team-img-wrapper img {
+    object-position: center 15% !important;
   }
   
   .brochure-team-body {
