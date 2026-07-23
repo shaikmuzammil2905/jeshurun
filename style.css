@@ -2430,12 +2430,20 @@ select.form-input {
   }
   
   .slider-dots {
-    bottom: 12px !important;
+    bottom: 15px !important;
   }
   
   .hero-bottom-call {
     margin-top: 15px !important;
-    margin-bottom: 25px !important;
+    margin-bottom: 50px !important;
+  }
+  
+  .hero-bottom-call a {
+    font-size: 0.9rem !important;
+    padding: 8px 20px !important;
+    background-color: rgba(11, 26, 48, 0.85) !important;
+    border-color: rgba(255, 255, 255, 0.3) !important;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25) !important;
   }
   
   .prev-arrow, .next-arrow {
@@ -2897,15 +2905,38 @@ select.form-input {
 /* Responsive adjustments */
 @media (max-width: 768px) {
   .brochure-slider-wrapper {
-    height: 520px;
+    height: auto !important;
+    min-height: 520px !important;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .brochure-slide {
+    position: relative !important;
+    height: auto !important;
+    min-height: 520px !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    display: none !important;
+    transition: none !important;
+  }
+  
+  .brochure-slide.active {
+    opacity: 1 !important;
+    visibility: visible !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: flex-start !important;
+    align-items: center !important;
+    padding: 30px 15px 50px 15px !important;
   }
   
   .brochure-team-grid {
     grid-template-columns: repeat(2, 1fr) !important;
     gap: 10px !important;
-    max-height: 420px;
-    overflow-y: auto;
-    padding-right: 5px;
+    max-height: none !important;
+    overflow-y: visible !important;
+    padding-right: 0 !important;
   }
   
   .brochure-team-card {
@@ -2935,16 +2966,19 @@ select.form-input {
   
   .brochure-spec-grid {
     grid-template-columns: 1fr;
-    max-height: 420px;
-    overflow-y: auto;
-    padding-right: 5px;
+    max-height: none !important;
+    overflow-y: visible !important;
+    padding-right: 0 !important;
   }
   
   .brochure-arrow {
     width: 36px;
     height: 36px;
+    top: auto !important;
+    bottom: 12px !important;
+    transform: none !important;
   }
   
-  .brochure-prev { left: 8px; }
-  .brochure-next { right: 8px; }
+  .brochure-prev { left: 16px !important; }
+  .brochure-next { right: 16px !important; }
 }
