@@ -45,7 +45,7 @@ body {
   background-color: var(--bg-white);
   line-height: 1.6;
   overflow-x: hidden;
-  padding-bottom: 0; /* Adjusted for mobile bottom nav in media query */
+  padding-bottom: 0;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -232,10 +232,22 @@ iframe {
   align-items: center;
   max-width: 1200px;
   margin: 0 auto;
-  padding: 15px 24px;
+  padding: 12px 24px;
 }
 
-/* Brand Logo */
+/* Brand Logo Image */
+.logo-wrapper {
+  display: flex;
+  align-items: center;
+}
+
+.brand-logo-img {
+  max-height: 48px;
+  width: auto;
+  object-fit: contain;
+  display: block;
+}
+
 .brand-logo {
   display: flex;
   align-items: center;
@@ -250,14 +262,14 @@ iframe {
 .brand-name {
   font-family: var(--font-headings);
   font-weight: 800;
-  font-size: 1.4rem;
+  font-size: 1.35rem;
   letter-spacing: 1px;
   color: var(--secondary-blue);
   line-height: 1.1;
 }
 
 .brand-sub {
-  font-size: 0.65rem;
+  font-size: 0.62rem;
   font-weight: 600;
   letter-spacing: 0.5px;
   color: var(--text-muted);
@@ -362,7 +374,7 @@ iframe {
 /* Mobile Collapsible Drawer */
 .mobile-overlay-menu {
   position: fixed;
-  top: 75px;
+  top: 72px;
   left: 0;
   width: 100%;
   height: 0;
@@ -374,28 +386,28 @@ iframe {
 }
 
 .mobile-overlay-menu.active {
-  height: calc(100vh - 75px);
+  height: calc(100vh - 72px);
 }
 
 .mobile-nav-links {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 40px 24px;
-  gap: 30px;
+  padding: 30px 24px;
+  gap: 20px;
 }
 
 .mobile-nav-links ul {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 20px;
+  gap: 15px;
 }
 
 .mobile-nav-link {
   font-family: var(--font-headings);
   font-weight: 700;
-  font-size: 1.3rem;
+  font-size: 1.25rem;
   color: var(--secondary-blue);
 }
 
@@ -404,23 +416,68 @@ iframe {
   color: var(--primary-red);
 }
 
-.mobile-menu-call {
-  display: inline-flex;
-  align-items: center;
+.mobile-menu-calls-list {
+  display: flex;
+  flex-direction: column;
   gap: 10px;
+  width: 100%;
+  margin-top: 10px;
+}
+
+.mobile-menu-call {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
   background-color: var(--primary-red);
   color: var(--bg-white);
-  padding: 12px 24px;
-  border-radius: 50px;
+  padding: 10px 20px;
+  border-radius: 4px;
   font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.mobile-menu-call.line-blue {
+  background-color: var(--secondary-blue);
+}
+
+.mobile-menu-call.line-landline {
+  background-color: var(--bg-light);
+  color: var(--text-dark);
+  border: 1px solid rgba(11, 26, 48, 0.1);
+}
+
+/* ==========================================================================
+   PAGE CURTAIN TRANSITIONS ("PATCH WORK")
+   ========================================================================== */
+.page-transition-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, var(--secondary-blue) 0%, var(--primary-red) 100%);
+  z-index: 9999;
+  transform: translateX(-100%);
+  pointer-events: none;
+}
+
+.page-transition-overlay.active-transition {
+  animation: sweepOver 0.7s cubic-bezier(0.76, 0, 0.24, 1) forwards;
+}
+
+@keyframes sweepOver {
+  0% { transform: translateX(-100%); }
+  50% { transform: translateX(0); }
+  100% { transform: translateX(100%); }
 }
 
 /* ==========================================================================
    VIEW STATES (SPA SHELL)
    ========================================================================== */
 .view-content-wrapper {
-  margin-top: 75px;
-  min-height: calc(100vh - 75px);
+  margin-top: 72px;
+  min-height: calc(100vh - 72px);
 }
 
 .view-section {
@@ -430,13 +487,13 @@ iframe {
 
 .view-section.active {
   display: block;
-  animation: viewFadeIn 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  animation: viewFadeIn 0.5s ease-in-out forwards;
 }
 
 @keyframes viewFadeIn {
   0% {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(10px);
   }
   100% {
     opacity: 1;
@@ -770,26 +827,15 @@ iframe {
 
 .service-body h3 {
   font-size: 1.15rem;
-  margin-bottom: 15px;
+  margin-bottom: 12px;
   font-weight: 700;
 }
 
-.service-body ul {
-  margin-bottom: 20px;
-}
-
-.service-body li {
-  font-size: 0.85rem;
-  color: var(--text-muted);
-  margin-bottom: 8px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.service-body li i {
-  color: var(--primary-red);
+.service-mini-desc {
   font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-bottom: 20px;
+  line-height: 1.5;
 }
 
 .btn-readmore {
@@ -1247,6 +1293,10 @@ iframe {
   color: rgba(255, 255, 255, 0.8);
 }
 
+.info-text p a:hover {
+  color: var(--primary-red);
+}
+
 /* Form Styles */
 .contact-form-col {
   padding: 50px 40px;
@@ -1490,14 +1540,15 @@ select.form-input {
 }
 
 .service-item-card h3 {
-  font-size: 1.15rem;
+  font-size: 1.2rem;
   margin: 15px 0 10px;
 }
 
 .service-item-card p {
-  font-size: 0.85rem;
+  font-size: 0.82rem;
   color: var(--text-muted);
   margin-bottom: 20px;
+  line-height: 1.6;
 }
 
 .readmore-link {
@@ -1512,6 +1563,184 @@ select.form-input {
 
 .readmore-link:hover {
   color: var(--secondary-blue);
+}
+
+/* Specialized Capabilities cards & modal */
+.capability-card {
+  background-color: var(--bg-white);
+  padding: 35px;
+  border-radius: 8px;
+  box-shadow: var(--shadow-sm);
+  border-top: 4px solid var(--secondary-blue);
+  transition: var(--transition-smooth);
+  cursor: pointer;
+  position: relative;
+}
+
+.capability-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-lg);
+  border-top-color: var(--primary-red);
+}
+
+.cap-num {
+  font-family: var(--font-headings);
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: rgba(11, 26, 48, 0.15);
+  margin-bottom: 15px;
+  transition: var(--transition-smooth);
+}
+
+.capability-card:hover .cap-num {
+  color: var(--primary-red);
+}
+
+.capability-card h3 {
+  font-size: 1.15rem;
+  margin-bottom: 12px;
+}
+
+.capability-card p {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-bottom: 20px;
+}
+
+.cap-action-btn {
+  font-family: var(--font-headings);
+  font-weight: 700;
+  font-size: 0.8rem;
+  color: var(--primary-red);
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.capability-card:hover .cap-action-btn {
+  color: var(--secondary-blue);
+}
+
+/* Interactive Capability Details Modal Popup */
+.capability-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(7, 17, 32, 0.92);
+  z-index: 2000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  backdrop-filter: blur(8px);
+}
+
+.capability-modal.active {
+  display: flex;
+}
+
+.cap-close-btn {
+  position: absolute;
+  top: 24px;
+  right: 24px;
+  font-size: 2.5rem;
+  color: var(--bg-white);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+  z-index: 2010;
+}
+
+.cap-close-btn:hover {
+  color: var(--primary-red);
+  transform: scale(1.1);
+}
+
+.cap-modal-container {
+  max-width: 650px;
+  width: 100%;
+  background-color: var(--bg-white);
+  border-radius: 12px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  overflow: hidden;
+  animation: modalScaleUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.cap-modal-header {
+  background-color: var(--secondary-blue);
+  color: var(--bg-white);
+  padding: 25px 40px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  border-bottom: 4px solid var(--primary-red);
+}
+
+.cap-modal-num {
+  font-family: var(--font-headings);
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--primary-red);
+  line-height: 1;
+}
+
+.cap-modal-header h2 {
+  color: var(--bg-white);
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.cap-modal-body {
+  padding: 40px;
+  max-height: calc(100vh - 180px);
+  overflow-y: auto;
+}
+
+.cap-modal-desc-block p {
+  font-size: 0.95rem;
+  color: var(--text-dark);
+  margin-bottom: 25px;
+  line-height: 1.7;
+}
+
+.cap-points-list-container h4 {
+  font-size: 0.9rem;
+  color: var(--secondary-blue);
+  margin-bottom: 15px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 1px solid var(--bg-light);
+  padding-bottom: 8px;
+}
+
+.cap-points-list {
+  margin-bottom: 30px;
+}
+
+.cap-points-list li {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  margin-bottom: 12px;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  line-height: 1.5;
+}
+
+.cap-points-list li i {
+  color: var(--primary-red);
+  margin-top: 5px;
+  font-size: 0.85rem;
+  flex-shrink: 0;
+}
+
+.cap-modal-cta {
+  width: 100%;
+  padding: 14px;
 }
 
 /* Service Process Timeline */
@@ -2094,6 +2323,7 @@ select.form-input {
   .hero-slider-container { height: 500px; }
   .hero-title { font-size: 2.8rem; }
   .grid-4-col { grid-template-columns: repeat(2, 1fr); }
+  .capabilities-grid { grid-template-columns: repeat(2, 1fr); }
   .project-card { min-width: calc((100% - 30px) / 2); }
   .proven-process-timeline { overflow-x: auto; padding-bottom: 20px; }
   .timeline-cards-row { width: 900px; }
@@ -2103,7 +2333,7 @@ select.form-input {
 
 @media (max-width: 768px) {
   body {
-    padding-bottom: 60px; /* To prevent sticky bottom nav overlapping content */
+    padding-bottom: 60px;
   }
   
   .desktop-nav {
@@ -2115,11 +2345,19 @@ select.form-input {
   }
   
   .mobile-bottom-nav {
-    display: block; /* Activate mobile bottom tab bar */
+    display: block;
+  }
+  
+  .header-actions {
+    gap: 12px;
   }
   
   .header-call-btn {
-    display: none; /* Hide header phone button, rely on mobile menu or bottom link */
+    display: none;
+  }
+  
+  .mobile-overlay-menu {
+    top: 72px;
   }
   
   .grid-3-col, .grid-4-col {
@@ -2127,6 +2365,10 @@ select.form-input {
   }
   
   .grid-2-col {
+    grid-template-columns: 1fr;
+  }
+  
+  .capabilities-grid {
     grid-template-columns: 1fr;
   }
   
@@ -2163,10 +2405,9 @@ select.form-input {
   }
   
   .prev-arrow, .next-arrow {
-    display: none; /* Hide arrows on mobile sliders */
+    display: none;
   }
   
-  /* Layout modifications for mobile */
   .about-image-wrapper {
     order: -1;
   }
@@ -2252,8 +2493,12 @@ select.form-input {
     flex: none;
   }
   
+  .cap-modal-body {
+    padding: 24px;
+  }
+  
   .floating-widgets {
-    bottom: 75px; /* Above mobile sticky bottom nav bar */
+    bottom: 75px;
     right: 15px;
   }
 }

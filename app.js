@@ -1,21 +1,20 @@
 /**
  * JESHURUN BUILDER'S & DEVELOPER'S - CLIENT SIDE APP LOGIC
- * Includes SPA View Router, Slide Carsouels, Counter Up Animation, 
- * Text animations, WhatsApp contact links, and Lightbox modal systems.
+ * Includes SPA View Router with Sweep Curtain Transition, Counter Up Animation, 
+ * Text Animations, Interactive Capabilities Modal, WhatsApp contact redirect.
  */
 
 document.addEventListener('DOMContentLoaded', () => {
 
   // ==========================================================================
-  // 1. SINGLE PAGE ROUTER (DYNAMIC SUBPAGE SWITCHER)
+  // 1. SINGLE PAGE ROUTER WITH CURTAIN SWEEP TRANSITION
   // ==========================================================================
-  const navLinks = document.querySelectorAll('.desktop-nav .nav-link, .mobile-nav-links .mobile-nav-link, .mobile-bottom-nav .bottom-nav-item, .footer-links-col a, .btn-readmore, .readmore-link, .btn-explore, .btn-contact');
   const viewSections = document.querySelectorAll('.view-section');
+  const transitionOverlay = document.getElementById('page-transition-overlay');
+  let isNavigating = false;
 
-  function router() {
-    let hash = window.location.hash || '#home';
-    
-    // Clear out prefix symbols if any
+  function router(targetHash) {
+    let hash = targetHash || window.location.hash || '#home';
     let route = hash.replace('#', '');
     
     // Map of routes to view element IDs
@@ -29,32 +28,40 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const activeViewId = routeMap[route] || 'home-view';
-    
-    // Smooth transition
-    viewSections.forEach(section => {
-      section.classList.remove('active');
-    });
-
     const activeViewEl = document.getElementById(activeViewId);
-    if (activeViewEl) {
+    
+    if (!activeViewEl) return;
+
+    // If curtain transition is available, perform sweep animation
+    if (transitionOverlay && !isNavigating) {
+      isNavigating = true;
+      transitionOverlay.classList.add('active-transition');
+
+      // Swap active section at midpoint (350ms)
+      setTimeout(() => {
+        viewSections.forEach(section => section.classList.remove('active'));
+        activeViewEl.classList.add('active');
+        updateNavActiveStates(route);
+        window.scrollTo(0, 0);
+        triggerViewLoadAnimations(activeViewId);
+      }, 350);
+
+      // Clean up classes after sweep completes (700ms)
+      setTimeout(() => {
+        transitionOverlay.classList.remove('active-transition');
+        isNavigating = false;
+      }, 700);
+    } else {
+      // Fallback if transition overlay is not found
+      viewSections.forEach(section => section.classList.remove('active'));
       activeViewEl.classList.add('active');
-      
-      // Trigger animations for the active view
+      updateNavActiveStates(route);
+      window.scrollTo(0, 0);
       triggerViewLoadAnimations(activeViewId);
     }
-
-    // Update active state in navigation bars
-    updateNavActiveStates(route);
-
-    // Scroll back to top
-    window.scrollTo({
-      top: 0,
-      behavior: 'smooth'
-    });
   }
 
   function updateNavActiveStates(route) {
-    // Desktop & Mobile burger links
     const links = document.querySelectorAll('.desktop-nav .nav-link, .mobile-nav-links .mobile-nav-link, .mobile-bottom-nav .bottom-nav-item');
     links.forEach(link => {
       const dataView = link.getAttribute('data-view');
@@ -66,31 +73,35 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Bind links that navigate to views (prevent default if using virtual path clicks)
+  // Intercept navigation links click to trigger custom router
   document.body.addEventListener('click', (e) => {
-    // Intercept clicks on links that target a route hash
     const link = e.target.closest('a');
     if (link) {
       const href = link.getAttribute('href');
       if (href && href.startsWith('#') && href.length > 1) {
-        // Let hashchange trigger the router, standard href routing
         const targetView = href.replace('#', '');
-        if (targetView in { 'home': 1, 'about': 1, 'projects': 1, 'services': 1, 'gallery': 1, 'contact': 1 }) {
-          // Normal hash update
+        const validRoutes = { 'home': 1, 'about': 1, 'projects': 1, 'services': 1, 'gallery': 1, 'contact': 1 };
+        
+        if (targetView in validRoutes) {
+          e.preventDefault();
+          history.pushState(null, null, href);
+          router(href);
         }
       }
     }
   });
 
-  // Listen for hash changes
-  window.addEventListener('hashchange', router);
-  
-  // Initialize router on first load
+  // Handle browser back/forward buttons
+  window.addEventListener('popstate', () => {
+    router();
+  });
+
+  // Initialize router
   router();
 
 
   // ==========================================================================
-  // 2. MOBILE MENU COLLAPSED OVERLAY DRAWER
+  // 2. MOBILE MENU DRAWER
   // ==========================================================================
   const burgerToggle = document.querySelector('.mobile-menu-toggle');
   const mobileOverlay = document.querySelector('.mobile-overlay-menu');
@@ -101,7 +112,6 @@ document.addEventListener('DOMContentLoaded', () => {
       burgerToggle.classList.toggle('active');
       mobileOverlay.classList.toggle('active');
       
-      // Animate burger bars
       const spans = burgerToggle.querySelectorAll('span');
       if (burgerToggle.classList.contains('active')) {
         spans[0].style.transform = 'rotate(45deg) translate(5px, 5px)';
@@ -114,7 +124,6 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
 
-    // Close menu drawer when any link is clicked
     mobileNavLinks.forEach(link => {
       link.addEventListener('click', () => {
         burgerToggle.classList.remove('active');
@@ -129,7 +138,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
   // ==========================================================================
-  // 3. HERO SLIDER BANNER CAROUSEL
+  // 3. HERO SLIDER CAROUSEL
   // ==========================================================================
   const heroSlides = document.querySelectorAll('.hero-slide');
   const slideDots = document.querySelectorAll('.slider-dots .dot');
@@ -139,6 +148,7 @@ document.addEventListener('DOMContentLoaded', () => {
   let slideInterval;
 
   function showSlide(index) {
+    if (heroSlides.length === 0) return;
     heroSlides.forEach((slide, idx) => {
       slide.classList.remove('active');
       slideDots[idx].classList.remove('active');
@@ -148,20 +158,14 @@ document.addEventListener('DOMContentLoaded', () => {
     heroSlides[currentSlideIndex].classList.add('active');
     slideDots[currentSlideIndex].classList.add('active');
     
-    // Trigger animated text inside active slide
     const title = heroSlides[currentSlideIndex].querySelector('.hero-title');
     if (title && title.classList.contains('animated-text')) {
       animateLetters(title);
     }
   }
 
-  function nextSlide() {
-    showSlide(currentSlideIndex + 1);
-  }
-
-  function prevSlide() {
-    showSlide(currentSlideIndex - 1);
-  }
+  function nextSlide() { showSlide(currentSlideIndex + 1); }
+  function prevSlide() { showSlide(currentSlideIndex - 1); }
 
   function startSlideShow() {
     clearInterval(slideInterval);
@@ -186,13 +190,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
   // ==========================================================================
-  // 4. STATS COUNTER TICKER ANIMATION
+  // 4. STATS COUNTER TICKER
   // ==========================================================================
   function animateCounters(statsEl) {
     const counterNumbers = statsEl.querySelectorAll('.stat-number');
     counterNumbers.forEach(counter => {
       const target = parseFloat(counter.getAttribute('data-target'));
-      const duration = 1500; // ms
+      const duration = 1500;
       let startTime = null;
 
       function updateCounter(currentTime) {
@@ -205,46 +209,38 @@ document.addEventListener('DOMContentLoaded', () => {
         if (progress < 1) {
           requestAnimationFrame(updateCounter);
         } else {
-          counter.textContent = target; // Safeguard final frame
+          counter.textContent = target;
         }
       }
       requestAnimationFrame(updateCounter);
     });
   }
 
-  // Observer to trigger counter when stats become visible
-  const statsObservers = [];
   const statsSections = document.querySelectorAll('.stats-section');
-  
   statsSections.forEach(section => {
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
           animateCounters(entry.target);
-          observer.unobserve(entry.target); // Trigger only once
+          observer.unobserve(entry.target);
         }
       });
     }, { threshold: 0.25 });
-    
     observer.observe(section);
-    statsObservers.push(observer);
   });
 
 
   // ==========================================================================
-  // 5. LETTERS & TEXT TYPING / POPPING ANIMATION
+  // 5. LETTERS POPPING ANIMATION
   // ==========================================================================
   function animateLetters(headingElement) {
     if (!headingElement) return;
-    
-    // Prevent double execution on same text
     if (headingElement.querySelector('.char-span')) return;
     
     const textContent = headingElement.textContent;
     headingElement.innerHTML = '';
     
     const words = textContent.split(' ');
-    
     words.forEach((word, wordIdx) => {
       const wordSpan = document.createElement('span');
       wordSpan.style.display = 'inline-block';
@@ -256,11 +252,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const charSpan = document.createElement('span');
         charSpan.classList.add('char-span');
         charSpan.textContent = char;
-        // Stagger transitions slightly
         charSpan.style.animationDelay = `${(wordIdx * 4 + charIdx) * 0.03}s`;
         wordSpan.appendChild(charSpan);
       });
-      
       headingElement.appendChild(wordSpan);
     });
   }
@@ -269,28 +263,154 @@ document.addEventListener('DOMContentLoaded', () => {
     const activeView = document.getElementById(viewId);
     if (!activeView) return;
 
-    // Trigger Title letter split animations inside loaded view
     const mainTitle = activeView.querySelector('.section-title, .subpage-banner h1');
     if (mainTitle) {
       animateLetters(mainTitle);
     }
-
-    // Trigger scroll-trigger visibility checking immediately for standard layouts
-    setTimeout(checkScrollTriggerElements, 100);
+    
+    // Check scroll trigger elements visibility immediately
+    setTimeout(checkScrollTriggerElements, 50);
   }
 
 
   // ==========================================================================
-  // 6. PORTFOLIO & RECENT WORK PROJECTS MODALS (LIGHTBOX DATA)
+  // 6. SPECIALIZED CAPABILITIES MODAL DATA SYSTEM
   // ==========================================================================
-  
-  // Project mock data database
+  const capabilityDatabase = {
+    'pre-construction': {
+      num: '01',
+      title: 'Pre-Construction & Development',
+      desc: 'Expert groundwork coordination before structural assembly starts, safeguarding land rights and financial projections.',
+      points: [
+        'Land Acquisition & Zoning: Identifying raw land, securing clean titles, and handling local zoning and landuse changes.',
+        'Feasibility & Planning: Comprehensive market research, structural budgeting, risk analysis, and raw site surveys.',
+        'Permitting & Approvals: Securing all building permits, NOCs, municipal documents, and environmental clearances.'
+      ]
+    },
+    'architecture': {
+      num: '02',
+      title: 'Architecture & Design',
+      desc: 'Formulating visually stunning blueprints and resilient layouts customized to spatial allocations.',
+      points: [
+        'Layout & Structural Planning: Creating architectural layouts, detailed 3D visualizations, elevation files, and seismic/geotechnical designs.',
+        'Interior Design: Designing custom layouts, premium modular kitchens, false ceilings, and wood cabinetry setups.'
+      ]
+    },
+    'civil-works': {
+      num: '03',
+      title: 'Site Preparation & Civil Works',
+      desc: 'Heavy machinery clearing, layout configurations, concrete foundation, and superstructures construction.',
+      points: [
+        'Site Clearing: Land grading, mobilization, leveling, and clearing obstructions.',
+        'Foundation & Superstructure: Excavating trenches, laying structural columns, concrete foundations, and building the core load-bearing columns framework.'
+      ]
+    },
+    'mep': {
+      num: '04',
+      title: 'MEP (Mechanical, Electrical, Plumbing)',
+      desc: 'Installing essential service networks and utilities utilizing superior quality fittings.',
+      points: [
+        'Utility Installation: Robust water supply lines, drainage pipes, and waste management systems.',
+        'Electrical Works: Secure wiring grids, fixture installations, and backup generator setups.',
+        'HVAC Works: Centralized air conditioning and ventilation grids.'
+      ]
+    },
+    'finishing': {
+      num: '05',
+      title: 'Finishing & Landscaping',
+      desc: 'Aesthetic additions and final polishes that elevate commercial structures and villa spaces.',
+      points: [
+        'Exterior Façade: Stone cladding, plastering, painting, and texture finishes.',
+        'Interior Finishing: Premium flooring (marble, vitrified tiles), painting, and structural glasswork.',
+        'Landscaping: Garden layout design, outdoor pathway lighting, and walkway construction.'
+      ]
+    },
+    'project-management': {
+      num: '06',
+      title: 'Project Management',
+      desc: 'Diligent timeline tracking and material quality supervisions during all building cycles.',
+      points: [
+        'Quality Control: Regular site supervision, raw material concrete testing, and construction standard checks.',
+        'Safety Management: Enforcing absolute compliance with building and safety codes.'
+      ]
+    },
+    'post-construction': {
+      num: '07',
+      title: 'Post-Construction Services',
+      desc: 'Handover protocols and administrative clearances, ensuring a complete peace-of-mind package.',
+      points: [
+        'Handover & Snag Rectification: Final inspections, deep cleaning, and defect repairs.',
+        'Documentation: Handing over warranties, structural floor plans, NOCs, and occupancy certificates.'
+      ]
+    }
+  };
+
+  const capModal = document.getElementById('capability-modal');
+  const capClose = document.getElementById('cap-close');
+  const capTitle = document.getElementById('cap-modal-title');
+  const capNum = document.getElementById('cap-modal-num');
+  const capDesc = document.getElementById('cap-modal-desc');
+  const capPointsList = document.getElementById('cap-points-list');
+  const capModalCtaBtn = document.getElementById('cap-modal-cta-btn');
+
+  function openCapabilityModal(capId) {
+    const data = capabilityDatabase[capId];
+    if (!data || !capModal) return;
+
+    capTitle.textContent = data.title;
+    capNum.textContent = data.num;
+    capDesc.textContent = data.desc;
+    
+    // Clear list
+    capPointsList.innerHTML = '';
+    data.points.forEach(pointText => {
+      const li = document.createElement('li');
+      li.innerHTML = `<i class="fa-solid fa-circle-check"></i> <span>${pointText}</span>`;
+      capPointsList.appendChild(li);
+    });
+
+    capModal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+
+  if (capModal && capClose) {
+    // Click cards to trigger
+    document.body.addEventListener('click', (e) => {
+      const card = e.target.closest('.capability-card');
+      if (card) {
+        const capId = card.getAttribute('data-capability');
+        if (capId) openCapabilityModal(capId);
+      }
+    });
+
+    capClose.addEventListener('click', () => {
+      capModal.classList.remove('active');
+      document.body.style.overflow = '';
+    });
+
+    capModal.addEventListener('click', (e) => {
+      if (e.target === capModal) {
+        capModal.classList.remove('active');
+        document.body.style.overflow = '';
+      }
+    });
+
+    capModalCtaBtn.addEventListener('click', () => {
+      capModal.classList.remove('active');
+      document.body.style.overflow = '';
+    });
+  }
+
+
+  // ==========================================================================
+  // 7. PORTFOLIO & RECENT WORK PROJECTS MODALS
+  // ==========================================================================
   const projectDatabase = {
     'luxury-villa': {
       title: 'Luxury Villa Project',
       meta: 'Jubilee Hills, Hyderabad | Completed',
       client: 'Arun & Family Co.',
-      category: 'Residential Development',
+      category: 'Residential Construction',
       size: '12,500 Sq Ft',
       desc: 'An architectural masterpiece combining state-of-the-art concrete structures, automated smart glass layouts, and an eco-sustainable infinity pool design. This premium luxury villa incorporates curated green garden space and custom solar systems, crafted exactly to details matching premium residential parameters.',
       images: [
@@ -303,7 +423,7 @@ document.addEventListener('DOMContentLoaded', () => {
       title: 'Premium Apartment Complex',
       meta: 'Somajiguda, Hyderabad | In Progress',
       client: 'Jeshurun Properties Group',
-      category: 'Multi-family Residential',
+      category: 'Property Development',
       size: '185,000 Sq Ft',
       desc: 'A futuristic residential high-rise complex containing 45 luxurious apartments, double-height lobby lounges, and basement parkings. Constructed with high-strength structural slabs, premium interior finish work, and strict compliance to safety standards.',
       images: [
@@ -316,7 +436,7 @@ document.addEventListener('DOMContentLoaded', () => {
       title: 'Commercial Complex / HQ',
       meta: 'Ameerpet, Hyderabad | Upcoming',
       client: 'Techspace Solutions Pvt. Ltd.',
-      category: 'Commercial Business Complex',
+      category: 'Commercial Construction',
       size: '95,000 Sq Ft',
       desc: 'Designed as a tech-enabled corporate headquarters featuring a double glass curtain facade, centralized heating ventilation systems, and open layouts. This energy-efficient building is scheduled for structural concrete works starting next quarter.',
       images: [
@@ -329,7 +449,7 @@ document.addEventListener('DOMContentLoaded', () => {
       title: 'Modern Residence Block',
       meta: 'Gachibowli, Hyderabad | Completed',
       client: 'V. K. Rao Ltd.',
-      category: 'Residential Luxury Block',
+      category: 'Residential Construction',
       size: '6,200 Sq Ft',
       desc: 'A premium triplex house completed within 14 months. Features raw stone exterior panels, customized wood ceilings, thermal panels, and complete smart house automation.',
       images: [
@@ -341,7 +461,7 @@ document.addEventListener('DOMContentLoaded', () => {
       title: 'Corporate Headquarters Lobby',
       meta: 'HITEC City, Hyderabad | Completed',
       client: 'NexGen FinTech',
-      category: 'Commercial Interiors',
+      category: 'Commercial Construction',
       size: '22,000 Sq Ft',
       desc: 'Complete interior design and fit-out architectural works. Handled wall panels, HVAC grids, acoustic ceilings, and structural partition layouts.',
       images: [
@@ -353,7 +473,7 @@ document.addEventListener('DOMContentLoaded', () => {
       title: 'Luxury Penthouses Block',
       meta: 'Begumpet, Hyderabad | In Progress',
       client: 'Grand View Ventures',
-      category: 'Residential Highrise',
+      category: 'Residential Construction',
       size: '30,000 Sq Ft',
       desc: 'Top three floor structural engineering custom designs. Includes luxury skydecks, structural roof glazing, private gardens, and heavy loading slab designs.',
       images: [
@@ -382,14 +502,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function openProjectLightbox(projectId) {
     const data = projectDatabase[projectId];
-    if (!data) return;
+    if (!data || !lightboxModal) return;
 
-    // Reset slider track
     slidesTrack.innerHTML = '';
     activeModalImgIndex = 0;
     modalImagesList = data.images;
 
-    // Populate images
     data.images.forEach(imgUrl => {
       const slide = document.createElement('div');
       slide.style.minWidth = '100%';
@@ -404,7 +522,6 @@ document.addEventListener('DOMContentLoaded', () => {
       slidesTrack.appendChild(slide);
     });
 
-    // Populate details
     titlePane.textContent = data.title;
     metaPane.textContent = data.meta;
     descPane.textContent = data.desc;
@@ -413,31 +530,28 @@ document.addEventListener('DOMContentLoaded', () => {
     sizePane.textContent = data.size;
 
     updateModalSlider();
-
-    // Toggle display
     lightboxModal.classList.add('active');
-    document.body.style.overflow = 'hidden'; // Lock background scrolling
+    document.body.style.overflow = 'hidden';
   }
 
   function updateModalSlider() {
-    slidesTrack.style.transform = `translateX(-${activeModalImgIndex * 100}%)`;
+    if (slidesTrack) {
+      slidesTrack.style.transform = `translateX(-${activeModalImgIndex * 100}%)`;
+    }
   }
 
   if (lightboxModal && lightboxClose) {
-    // Event delegation for opening cards
     document.body.addEventListener('click', (e) => {
       const projectCard = e.target.closest('.project-card');
       if (projectCard) {
         const prjId = projectCard.getAttribute('data-project');
-        if (prjId) {
-          openProjectLightbox(prjId);
-        }
+        if (prjId) openProjectLightbox(prjId);
       }
     });
 
     lightboxClose.addEventListener('click', () => {
       lightboxModal.classList.remove('active');
-      document.body.style.overflow = ''; // Unlock scrolling
+      document.body.style.overflow = '';
     });
 
     nextLBtn.addEventListener('click', () => {
@@ -454,7 +568,6 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
 
-    // Close lightbox on wrapper background click
     lightboxModal.addEventListener('click', (e) => {
       if (e.target === lightboxModal) {
         lightboxModal.classList.remove('active');
@@ -462,7 +575,6 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
 
-    // Link CTA inside modal closes modal and jumps to contact hash
     modalCTABtn.addEventListener('click', () => {
       lightboxModal.classList.remove('active');
       document.body.style.overflow = '';
@@ -471,29 +583,27 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
   // ==========================================================================
-  // 7. GALLERY & PROJECTS SHOWCASE CATEGORY FILTER SYSTEM
+  // 8. CATEGORY FILTERS
   // ==========================================================================
   function setupFilterSystem(filterContainerId, gridContainerSelector, itemSelector) {
     const filterRow = document.getElementById(filterContainerId);
     if (!filterRow) return;
 
     const filterButtons = filterRow.querySelectorAll('.filter-btn');
-    const items = document.querySelectorAll(gridContainerSelector + ' ' + itemSelector);
-
+    
     filterButtons.forEach(btn => {
       btn.addEventListener('click', (e) => {
-        // Clear active classes
         filterButtons.forEach(b => b.classList.remove('active'));
         e.target.classList.add('active');
 
         const filterValue = e.target.getAttribute('data-filter');
+        const items = document.querySelectorAll(gridContainerSelector + ' ' + itemSelector);
 
         items.forEach(item => {
-          // Check categories match
           const itemCategory = item.getAttribute('data-category');
-          if (filterValue === 'all' || itemCategory === filterValue) {
+          if (filterValue === 'all' || itemCategory === filterValue || item.getAttribute('data-project') === filterValue) {
             item.style.display = 'block';
-            item.style.animation = 'viewFadeIn 0.4s ease forwards';
+            item.style.animation = 'viewFadeIn 0.3s ease forwards';
           } else {
             item.style.display = 'none';
           }
@@ -502,16 +612,12 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Home Gallery filter
-  setupFilterSystem('home-gallery-filters', '.gallery-grid', '.gallery-item');
-  // Subpage Gallery filter
   setupFilterSystem('gallery-view-filters', '#gallery-view-grid', '.gallery-item');
-  // Subpage Projects filter
   setupFilterSystem('projects-view-filters', '.projects-grid', '.project-card');
 
 
   // ==========================================================================
-  // 8. CONTACT FORM MESSAGE ROUTING TO WHATSAPP (+91 93921 68888)
+  // 9. WHATSAPP ENQUIRY ROUTING (+91 93921 68888)
   // ==========================================================================
   const contactForms = document.querySelectorAll('.contact-enquiry-form');
 
@@ -519,7 +625,6 @@ document.addEventListener('DOMContentLoaded', () => {
     form.addEventListener('submit', (e) => {
       e.preventDefault();
 
-      // Read form data
       const name = form.querySelector('.text-input-name').value.trim();
       const phone = form.querySelector('.text-input-phone').value.trim();
       const email = form.querySelector('.text-input-email').value.trim();
@@ -529,52 +634,42 @@ document.addEventListener('DOMContentLoaded', () => {
       const subjectInput = form.querySelector('.text-input-subject');
       const subject = subjectInput ? subjectInput.value.trim() : 'Project Inquiry';
 
-      // Check validation
       if (!name || !phone || !email || !projectType || !message) {
         alert('Please fill out all required fields.');
         return;
       }
 
-      // Format custom message
       const formattedMessage = `Hello Jeshurun Builder's, I want to submit an enquiry:
 ----------------------------------------
 👤 *Name*: ${name}
 📞 *Phone*: ${phone}
 📧 *Email*: ${email}
-🏗️ *Project Type*: ${projectType}
+🏗️ *Service Required*: ${projectType}
 📌 *Subject*: ${subject}
 💬 *Message*: ${message}`;
 
-      // URL encode
       const encodedText = encodeURIComponent(formattedMessage);
-      
-      // WhatsApp API Link construction
       const whatsappURL = `https://wa.me/919392168888?text=${encodedText}`;
 
-      // Open in a new tab
       window.open(whatsappURL, '_blank');
-      
-      // Clear inputs
       form.reset();
     });
   });
 
 
   // ==========================================================================
-  // 9. GOOGLE MAPS LINK INTEGRATION (https://maps.app.goo.gl/3NbPbWttGBSjQ692A)
+  // 10. GOOGLE MAPS RED MARK ROUTING (https://maps.app.goo.gl/3NbPbWttGBSjQ692A)
   // ==========================================================================
   const mapTriggers = document.querySelectorAll('#home-map-trigger, #subpage-map-trigger');
-  
   mapTriggers.forEach(trigger => {
     trigger.addEventListener('click', () => {
-      const mapLink = 'https://maps.app.goo.gl/3NbPbWttGBSjQ692A';
-      window.open(mapLink, '_blank');
+      window.open('https://maps.app.goo.gl/3NbPbWttGBSjQ692A', '_blank');
     });
   });
 
 
   // ==========================================================================
-  // 10. SCROLL TO TOP & FLOATING WIDGET ACTIONS
+  // 11. SCROLL TO TOP & WIDGET ACTIONS
   // ==========================================================================
   const scrollTopBtn = document.getElementById('scroll-to-top-btn');
 
@@ -597,7 +692,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
   // ==========================================================================
-  // 11. SCROLL REVEAL STICKY OBSERVERS
+  // 12. SCROLL TRIGGER OBSERVERS
   // ==========================================================================
   const scrollElements = document.querySelectorAll('.scroll-trigger');
 
@@ -605,8 +700,6 @@ document.addEventListener('DOMContentLoaded', () => {
     scrollElements.forEach(el => {
       const rect = el.getBoundingClientRect();
       const windowHeight = window.innerHeight || document.documentElement.clientHeight;
-      
-      // Element is visible in viewport
       if (rect.top <= windowHeight * 0.85) {
         el.classList.add('appear');
       }
@@ -614,44 +707,34 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   window.addEventListener('scroll', checkScrollTriggerElements);
-  // Initial check
   checkScrollTriggerElements();
 
-  // Testimonial automatic/manual slider carousel logic
+
+  // ==========================================================================
+  // 13. TESTIMONIAL SLIDER CAROUSEL
+  // ==========================================================================
   const testimonialSlides = document.querySelectorAll('.testimonial-slide');
   const prevTestiBtn = document.querySelector('.prev-testi-btn');
   const nextTestiBtn = document.querySelector('.next-testi-btn');
   let currentTestiIdx = 0;
 
   function showTestimonial(idx) {
+    if (testimonialSlides.length === 0) return;
     testimonialSlides.forEach(slide => slide.classList.remove('active'));
     currentTestiIdx = (idx + testimonialSlides.length) % testimonialSlides.length;
     testimonialSlides[currentTestiIdx].classList.add('active');
   }
 
   if (testimonialSlides.length > 0) {
-    if (nextTestiBtn) {
-      nextTestiBtn.addEventListener('click', () => {
-        showTestimonial(currentTestiIdx + 1);
-      });
-    }
-    if (prevTestiBtn) {
-      prevTestiBtn.addEventListener('click', () => {
-        showTestimonial(currentTestiIdx - 1);
-      });
-    }
-    
-    // Auto cycle testimonials
-    setInterval(() => {
-      showTestimonial(currentTestiIdx + 1);
-    }, 8000);
+    if (nextTestiBtn) nextTestiBtn.addEventListener('click', () => showTestimonial(currentTestiIdx + 1));
+    if (prevTestiBtn) prevTestiBtn.addEventListener('click', () => showTestimonial(currentTestiIdx - 1));
+    setInterval(() => showTestimonial(currentTestiIdx + 1), 8000);
   }
 
-  // Handle clicking details from gallery snaps to open projects
+  // Handle clicking items inside gallery grids to open lightbox categories
   const galleryItems = document.querySelectorAll('.gallery-item');
   galleryItems.forEach(item => {
     item.addEventListener('click', () => {
-      // Map item category to a corresponding mock database project for preview
       const cat = item.getAttribute('data-category');
       const projectMap = {
         'residential': 'luxury-villa',
@@ -660,7 +743,6 @@ document.addEventListener('DOMContentLoaded', () => {
         'progress': 'luxury-penthouses',
         'completed': 'modern-residence'
       };
-      
       const prjId = projectMap[cat] || 'luxury-villa';
       openProjectLightbox(prjId);
     });

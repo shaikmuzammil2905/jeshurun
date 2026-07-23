@@ -15,21 +15,15 @@
 </head>
 <body>
 
+  <!-- PAGE TRANSITION OVERLAY (SWEEP CURTAIN EFFECT) -->
+  <div class="page-transition-overlay" id="page-transition-overlay"></div>
+
   <!-- HEADER -->
   <header class="site-header">
     <div class="header-container">
       <a href="#home" class="brand-logo" id="header-logo-link">
         <div class="logo-wrapper">
-          <svg class="brand-logo-svg" viewBox="0 0 100 100" width="45" height="45">
-            <!-- Hexagonal base frame -->
-            <polygon points="50,5 92,27 92,73 50,95 8,73 8,27" fill="none" stroke="#0b1a30" stroke-width="4"/>
-            <!-- Monogram J (Dark Blue) -->
-            <path d="M30,22 H42 V62 Q42,75 30,75 Q18,75 18,62 H30 Q30,65 30,62 L30,35 H25 V22 Z" fill="#0b1a30"/>
-            <!-- Monogram B (Red) -->
-            <path d="M48,22 H68 Q78,22 78,33 Q78,41 70,44 Q78,46 78,57 Q78,68 68,68 H48 Z M60,32 V40 H66 Q69,40 69,36 Q69,32 66,32 Z M60,49 V58 H66 Q69,58 69,53.5 Q69,49 66,49 Z" fill="#d32f2f"/>
-            <!-- Small building peak -->
-            <polygon points="50,11 68,22 32,22" fill="#d32f2f"/>
-          </svg>
+          <img src="image copy 6.png" alt="Jeshurun Logo" class="brand-logo-img">
         </div>
         <div class="brand-text">
           <span class="brand-name">JESHURUN</span>
@@ -51,10 +45,12 @@
 
       <!-- Contact Button & Hamburger -->
       <div class="header-actions">
-        <a href="tel:+919392168888" class="header-call-btn">
-          <span class="call-icon"><i class="fa-solid fa-phone"></i></span>
-          <span class="call-text">Call Now <br><strong>+91 93921 68888</strong></span>
-        </a>
+        <div class="header-multi-calls">
+          <a href="tel:+919392168888" class="header-call-btn">
+            <span class="call-icon"><i class="fa-solid fa-phone"></i></span>
+            <span class="call-text">Call Now <br><strong>+91 93921 68888</strong></span>
+          </a>
+        </div>
         <button class="mobile-menu-toggle" aria-label="Toggle Menu">
           <span></span>
           <span></span>
@@ -75,9 +71,17 @@
         <li><a href="#gallery" class="mobile-nav-link" data-view="gallery">GALLERY</a></li>
         <li><a href="#contact" class="mobile-nav-link" data-view="contact">CONTACT US</a></li>
       </ul>
-      <a href="tel:+919392168888" class="mobile-menu-call">
-        <i class="fa-solid fa-phone"></i> +91 93921 68888
-      </a>
+      <div class="mobile-menu-calls-list">
+        <a href="tel:+919392168888" class="mobile-menu-call">
+          <i class="fa-solid fa-phone"></i> +91 93921 68888
+        </a>
+        <a href="tel:+919440039858" class="mobile-menu-call line-blue">
+          <i class="fa-solid fa-phone"></i> +91 94400 39858
+        </a>
+        <a href="tel:04035180410" class="mobile-menu-call line-landline">
+          <i class="fa-solid fa-phone"></i> 040 35180410
+        </a>
+      </div>
     </nav>
   </div>
 
@@ -110,7 +114,7 @@
               <a href="#contact" class="btn btn-outline btn-contact" data-target="contact">CONTACT US</a>
             </div>
             <div class="hero-bottom-call">
-              <a href="tel:+919392168888"><i class="fa-solid fa-phone"></i> Call Now +91 93921 68888</a>
+              <a href="tel:+919440039858"><i class="fa-solid fa-phone"></i> Call Now +91 94400 39858</a>
             </div>
           </div>
         </div>
@@ -169,7 +173,7 @@
         <div class="container grid grid-4-col">
           <div class="stat-card">
             <div class="stat-icon"><i class="fa-solid fa-business-time"></i></div>
-            <div class="stat-number-wrapper"><span class="stat-number" data-target="15">0</span><span class="stat-suffix">+</span></div>
+            <div class="stat-number-wrapper"><span class="stat-number" data-target="20">0</span><span class="stat-suffix">+</span></div>
             <p class="stat-label">Years Experience</p>
           </div>
           <div class="stat-card">
@@ -203,56 +207,40 @@
               </div>
               <div class="service-body">
                 <h3>Residential Construction</h3>
-                <ul>
-                  <li><i class="fa-solid fa-circle-check"></i> Luxury Villas</li>
-                  <li><i class="fa-solid fa-circle-check"></i> Apartments</li>
-                  <li><i class="fa-solid fa-circle-check"></i> Independent Houses</li>
-                </ul>
+                <p class="service-mini-desc">Delivering custom luxury villas, modern apartments, and individual houses with technical precision and safety.</p>
                 <a href="#services" class="btn-readmore" data-target="services">READ MORE <i class="fa-solid fa-arrow-right"></i></a>
               </div>
             </div>
             <div class="service-preview-card">
               <div class="service-icon blue-bg"><i class="fa-solid fa-building"></i></div>
               <div class="service-img-h">
-                <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=400&q=80" alt="Commercial Projects">
+                <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=400&q=80" alt="Commercial Construction">
               </div>
               <div class="service-body">
-                <h3>Commercial Projects</h3>
-                <ul>
-                  <li><i class="fa-solid fa-circle-check"></i> Office Buildings</li>
-                  <li><i class="fa-solid fa-circle-check"></i> Retail Spaces</li>
-                  <li><i class="fa-solid fa-circle-check"></i> Shopping Complexes</li>
-                </ul>
+                <h3>Commercial Construction</h3>
+                <p class="service-mini-desc">Iconic office complexes, commercial workspaces, and shopping complexes engineered for growth and durability.</p>
                 <a href="#services" class="btn-readmore" data-target="services">READ MORE <i class="fa-solid fa-arrow-right"></i></a>
               </div>
             </div>
             <div class="service-preview-card">
-              <div class="service-icon red-bg"><i class="fa-solid fa-helmet-safety"></i></div>
+              <div class="service-icon red-bg"><i class="fa-solid fa-globe"></i></div>
               <div class="service-img-h">
-                <img src="https://images.unsplash.com/photo-1541888946425-d81bb19240f5?auto=format&fit=crop&w=400&q=80" alt="Construction Management">
+                <img src="https://images.unsplash.com/photo-1541888946425-d81bb19240f5?auto=format&fit=crop&w=400&q=80" alt="Property Development">
               </div>
               <div class="service-body">
-                <h3>Construction Management</h3>
-                <ul>
-                  <li><i class="fa-solid fa-circle-check"></i> Planning</li>
-                  <li><i class="fa-solid fa-circle-check"></i> Execution</li>
-                  <li><i class="fa-solid fa-circle-check"></i> Project Supervision</li>
-                </ul>
+                <h3>Property Development</h3>
+                <p class="service-mini-desc">High-value developments and sustainable architectural masterplans that create generational value.</p>
                 <a href="#services" class="btn-readmore" data-target="services">READ MORE <i class="fa-solid fa-arrow-right"></i></a>
               </div>
             </div>
             <div class="service-preview-card">
-              <div class="service-icon blue-bg"><i class="fa-solid fa-pen-ruler"></i></div>
+              <div class="service-icon blue-bg"><i class="fa-solid fa-map-location-dot"></i></div>
               <div class="service-img-h">
-                <img src="https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=400&q=80" alt="Architecture & Design">
+                <img src="https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=400&q=80" alt="Open Venture Plots">
               </div>
               <div class="service-body">
-                <h3>Architecture & Design</h3>
-                <ul>
-                  <li><i class="fa-solid fa-circle-check"></i> Modern Designs</li>
-                  <li><i class="fa-solid fa-circle-check"></i> 3D Elevation</li>
-                  <li><i class="fa-solid fa-circle-check"></i> Interior Planning</li>
-                </ul>
+                <h3>Open Venture Plots</h3>
+                <p class="service-mini-desc">Exquisitely planned gated layouts, raw land acquisitions, and premium open venture plots ready for custom structures.</p>
                 <a href="#services" class="btn-readmore" data-target="services">READ MORE <i class="fa-solid fa-arrow-right"></i></a>
               </div>
             </div>
@@ -493,28 +481,28 @@
                   <div class="info-icon-circle"><i class="fa-solid fa-map-location-dot"></i></div>
                   <div class="info-text">
                     <h5>Office Address</h5>
-                    <p>123, Builders Street, Hyderabad, Telangana - 500001</p>
+                    <p>B-23, F-4, Osmania university road, vidyanagar, vignanapuri colony, Hyderabad, Telangana - 500044</p>
                   </div>
                 </li>
                 <li>
                   <div class="info-icon-circle"><i class="fa-solid fa-phone"></i></div>
                   <div class="info-text">
-                    <h5>Phone Number</h5>
-                    <p>+91 93921 68888</p>
+                    <h5>Phone Numbers</h5>
+                    <p><a href="tel:+919392168888">+91 93921 68888</a><br><a href="tel:+919440039858">+91 94400 39858</a><br><a href="tel:04035180410">040 35180410</a></p>
                   </div>
                 </li>
                 <li>
                   <div class="info-icon-circle"><i class="fa-solid fa-envelope"></i></div>
                   <div class="info-text">
                     <h5>Email Address</h5>
-                    <p>info@jeshurunbuilders.com</p>
+                    <p>jeshurunbuildersndevelopers@gmail.com</p>
                   </div>
                 </li>
                 <li>
                   <div class="info-icon-circle"><i class="fa-solid fa-business-time"></i></div>
                   <div class="info-text">
                     <h5>Working Hours</h5>
-                    <p>Mon - Sat: 9:00 AM - 7:00 PM</p>
+                    <p>Mon - Sat: 9:00 AM - 7:00 PM<br>Sunday: Closed</p>
                   </div>
                 </li>
               </ul>
@@ -536,9 +524,9 @@
                   <select required class="form-input select-project-type">
                     <option value="" disabled selected>Project Type</option>
                     <option value="Residential">Residential Construction</option>
-                    <option value="Commercial">Commercial Project</option>
-                    <option value="Architecture">Architecture & Design</option>
-                    <option value="Renovation">Renovation & Remodeling</option>
+                    <option value="Commercial">Commercial Construction</option>
+                    <option value="Property">Property Development</option>
+                    <option value="Plots">Open Venture Plots</option>
                   </select>
                 </div>
                 <div class="form-group">
@@ -580,8 +568,8 @@
           <div class="story-content-left scroll-trigger left-slide">
             <span class="section-subtitle">OUR STORY</span>
             <h2 class="section-title">Building Trust Since Day One</h2>
-            <p>JESHURUN BUILDER'S & DEVELOPER'S PVT. LTD. is dedicated to creating exceptional residential and commercial spaces through innovative design, quality construction, and timely delivery.</p>
-            <p>We combine expertise, integrity, and modern engineering to build projects that offer lasting value, comfort, and trust for every client. Our projects stand tall as testimonials to our architectural perfection and commitment.</p>
+            <p>JESHURUN BUILDER'S & DEVELOPER'S PVT. LTD. is dedicated to creating exceptional residential and commercial spaces through innovative design, quality construction, and timely delivery. We combine expertise, integrity, and modern engineering to build projects that offer lasting value, comfort, and trust for every client.</p>
+            <p>We combine technical excellence with transparency, ensuring that every project reflects our promise of a better tomorrow.</p>
             <button class="btn btn-primary" id="btn-read-more-about">More About Us <i class="fa-solid fa-arrow-right"></i></button>
           </div>
           <div class="story-image-right scroll-trigger right-slide">
@@ -592,26 +580,21 @@
 
       <!-- Mission / Vision / Values / Promise Grid -->
       <section class="section bg-light values-section">
-        <div class="container grid grid-4-col">
+        <div class="container grid grid-3-col">
           <div class="value-card">
             <div class="value-icon"><i class="fa-solid fa-bullseye"></i></div>
             <h3>Our Mission</h3>
-            <p>To deliver high-quality construction that enhances lives and creates long-term value.</p>
+            <p>Our mission is to provide high-quality, cost-effective, and safe construction services that exceed client expectations. We focus on careful planning, skilled execution, and meeting timelines. Transparent communication, professional ethics, and continuous improvement guide our work, ensuring that every project we undertake reflects our commitment to excellence.</p>
           </div>
           <div class="value-card">
             <div class="value-icon"><i class="fa-solid fa-eye"></i></div>
             <h3>Our Vision</h3>
-            <p>To be a trusted name in real estate, known for innovation, quality, and customer trust.</p>
+            <p>To be a trusted leader in the construction industry by creating innovative, sustainable, and high-quality spaces that enrich lives, inspire communities, and deliver lasting value through excellence, integrity, and customer satisfaction.</p>
           </div>
           <div class="value-card">
             <div class="value-icon"><i class="fa-solid fa-gem"></i></div>
-            <h3>Our Values</h3>
-            <p>Integrity, transparency, quality, and commitment drive everything we build.</p>
-          </div>
-          <div class="value-card">
-            <div class="value-icon"><i class="fa-solid fa-circle-check"></i></div>
-            <h3>Our Promise</h3>
-            <p>We deliver what we commit with honesty, dedication, and excellence.</p>
+            <h3>Our Core Values</h3>
+            <p>We are guided by transparency, professional ethics, absolute safety compliance, building standards compliance, client trust, and continuous technical improvement across structural operations.</p>
           </div>
         </div>
       </section>
@@ -621,7 +604,7 @@
         <div class="container grid grid-4-col">
           <div class="stat-card">
             <div class="stat-icon"><i class="fa-solid fa-business-time"></i></div>
-            <div class="stat-number-wrapper"><span class="stat-number" data-target="15">0</span><span class="stat-suffix">+</span></div>
+            <div class="stat-number-wrapper"><span class="stat-number" data-target="20">0</span><span class="stat-suffix">+</span></div>
             <p class="stat-label">Years Experience</p>
           </div>
           <div class="stat-card">
@@ -729,68 +712,104 @@
         </div>
       </div>
 
+      <!-- Core Services List (4 main services) -->
       <section class="section subpage-services-grid-section">
         <div class="container text-center">
           <span class="section-subtitle text-center">WHAT WE DO</span>
           <h2 class="section-title text-center">Comprehensive Solutions for Every Need</h2>
-          <p class="section-lead text-center">From concept to completion, we provide a wide range of services to turn your vision into reality with excellence and precision.</p>
+          <p class="section-lead text-center">We are committed to delivering top-notch civil, structural, and building services. With years of hands-on experience, we focus on combining technical expertise with precision to ensure every project is executed safely, efficiently, and to the highest quality standards. Our commitment to excellence has made us a trusted partner for both individual clients and corporate organizations.</p>
 
-          <div class="services-list-grid grid grid-4-col">
+          <div class="services-list-grid grid grid-4-col" style="margin-top: 40px;">
             <!-- Card 1 -->
             <div class="service-item-card">
               <div class="service-icon red-bg"><i class="fa-solid fa-house-chimney"></i></div>
               <h3>Residential Construction</h3>
-              <p>Luxury villas, apartments and independent houses designed for modern living.</p>
-              <a href="#contact" class="readmore-link" data-target="contact">Read More <i class="fa-solid fa-arrow-right"></i></a>
+              <p>We are committed to delivering top-notch civil, structural, and building services. With years of hands-on experience, we focus on combining technical expertise with precision to ensure every project is executed safely, efficiently, and to the highest quality standards.</p>
+              <a href="#contact" class="readmore-link" data-target="contact">Book Consultation <i class="fa-solid fa-arrow-right"></i></a>
             </div>
             <!-- Card 2 -->
             <div class="service-item-card">
               <div class="service-icon blue-bg"><i class="fa-solid fa-building"></i></div>
-              <h3>Commercial Projects</h3>
-              <p>Office buildings, retail spaces, and shopping complexes built to empower businesses.</p>
-              <a href="#contact" class="readmore-link" data-target="contact">Read More <i class="fa-solid fa-arrow-right"></i></a>
+              <h3>Commercial Construction</h3>
+              <p>We are committed to delivering top-notch civil, structural, and building services. With years of hands-on experience, we focus on combining technical expertise with precision to ensure every project is executed safely, efficiently, and to the highest quality standards.</p>
+              <a href="#contact" class="readmore-link" data-target="contact">Book Consultation <i class="fa-solid fa-arrow-right"></i></a>
             </div>
             <!-- Card 3 -->
             <div class="service-item-card">
-              <div class="service-icon red-bg"><i class="fa-solid fa-helmet-safety"></i></div>
-              <h3>Construction Management</h3>
-              <p>Complete planning, execution, and supervision to ensure quality and timely delivery.</p>
-              <a href="#contact" class="readmore-link" data-target="contact">Read More <i class="fa-solid fa-arrow-right"></i></a>
+              <div class="service-icon red-bg"><i class="fa-solid fa-globe"></i></div>
+              <h3>Property Development</h3>
+              <p>We are committed to delivering top-notch civil, structural, and building services. With years of hands-on experience, we focus on combining technical expertise with precision to ensure every project is executed safely, efficiently, and to the highest quality standards.</p>
+              <a href="#contact" class="readmore-link" data-target="contact">Book Consultation <i class="fa-solid fa-arrow-right"></i></a>
             </div>
             <!-- Card 4 -->
             <div class="service-item-card">
-              <div class="service-icon blue-bg"><i class="fa-solid fa-pen-ruler"></i></div>
+              <div class="service-icon blue-bg"><i class="fa-solid fa-map-location-dot"></i></div>
+              <h3>Open Venture Plots</h3>
+              <p>We are committed to delivering top-notch civil, structural, and building services. With years of hands-on experience, we focus on combining technical expertise with precision to ensure every project is executed safely, efficiently, and to the highest quality standards.</p>
+              <a href="#contact" class="readmore-link" data-target="contact">Book Consultation <i class="fa-solid fa-arrow-right"></i></a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Specialized Capabilities (7 Interactive Cards) -->
+      <section class="section bg-light subpage-capabilities-section">
+        <div class="container">
+          <div class="text-center">
+            <span class="section-subtitle text-center">OUR EXPERTISE</span>
+            <h2 class="section-title text-center">Specialized Technical Capabilities</h2>
+            <p class="section-lead text-center" style="max-width: 750px; margin: 0 auto 50px;">Click any option below to view its specific subpoints, documentation details, and structural points clearly.</p>
+          </div>
+
+          <div class="capabilities-grid grid grid-3-col">
+            <!-- 1 -->
+            <div class="capability-card" data-capability="pre-construction">
+              <div class="cap-num">01</div>
+              <h3>Pre-Construction & Development</h3>
+              <p>Land acquisitions, raw land surveying, zoning clearance, permits and approvals...</p>
+              <span class="cap-action-btn">View Subpoints <i class="fa-solid fa-arrow-right"></i></span>
+            </div>
+            <!-- 2 -->
+            <div class="capability-card" data-capability="architecture">
+              <div class="cap-num">02</div>
               <h3>Architecture & Design</h3>
-              <p>Innovative architectural designs, 3D elevations, and interior planning tailored to your needs.</p>
-              <a href="#contact" class="readmore-link" data-target="contact">Read More <i class="fa-solid fa-arrow-right"></i></a>
+              <p>Structural planning, layout blueprints, 3D visualization elevations, interior modular designs...</p>
+              <span class="cap-action-btn">View Subpoints <i class="fa-solid fa-arrow-right"></i></span>
             </div>
-            <!-- Card 5 -->
-            <div class="service-item-card">
-              <div class="service-icon blue-bg"><i class="fa-solid fa-clipboard-list"></i></div>
-              <h3>Project Planning</h3>
-              <p>Feasibility studies, cost estimation, and detailed planning for successful project execution.</p>
-              <a href="#contact" class="readmore-link" data-target="contact">Read More <i class="fa-solid fa-arrow-right"></i></a>
+            <!-- 3 -->
+            <div class="capability-card" data-capability="civil-works">
+              <div class="cap-num">03</div>
+              <h3>Site Preparation & Civil Works</h3>
+              <p>Land grading, grading sites, layouts excavation, structural foundations, core superstructures...</p>
+              <span class="cap-action-btn">View Subpoints <i class="fa-solid fa-arrow-right"></i></span>
             </div>
-            <!-- Card 6 -->
-            <div class="service-item-card">
-              <div class="service-icon red-bg"><i class="fa-solid fa-couch"></i></div>
-              <h3>Interior Solutions</h3>
-              <p>Functional and aesthetic interior designs that enhance comfort and elevate spaces.</p>
-              <a href="#contact" class="readmore-link" data-target="contact">Read More <i class="fa-solid fa-arrow-right"></i></a>
+            <!-- 4 -->
+            <div class="capability-card" data-capability="mep">
+              <div class="cap-num">04</div>
+              <h3>MEP Engineering</h3>
+              <p>Plumbing utility networks, electrical wiring installations, centralized HVAC AC ventilation setups...</p>
+              <span class="cap-action-btn">View Subpoints <i class="fa-solid fa-arrow-right"></i></span>
             </div>
-            <!-- Card 7 -->
-            <div class="service-item-card">
-              <div class="service-icon blue-bg"><i class="fa-solid fa-hammer"></i></div>
-              <h3>Renovation & Remodeling</h3>
-              <p>Transforming existing spaces with modern upgrades and quality craftsmanship.</p>
-              <a href="#contact" class="readmore-link" data-target="contact">Read More <i class="fa-solid fa-arrow-right"></i></a>
+            <!-- 5 -->
+            <div class="capability-card" data-capability="finishing">
+              <div class="cap-num">05</div>
+              <h3>Finishing & Landscaping</h3>
+              <p>Exterior facade cladding, interior tile/marble flooring, texture painting, walkthrough walkway garden structures...</p>
+              <span class="cap-action-btn">View Subpoints <i class="fa-solid fa-arrow-right"></i></span>
             </div>
-            <!-- Card 8 -->
-            <div class="service-item-card">
-              <div class="service-icon red-bg"><i class="fa-solid fa-handshake"></i></div>
-              <h3>Turnkey Projects</h3>
-              <p>End-to-end turnkey solutions with single-point responsibility and complete peace of mind.</p>
-              <a href="#contact" class="readmore-link" data-target="contact">Read More <i class="fa-solid fa-arrow-right"></i></a>
+            <!-- 6 -->
+            <div class="capability-card" data-capability="project-management">
+              <div class="cap-num">06</div>
+              <h3>Project Management</h3>
+              <p>Regular site safety inspections, concrete materials testing, safety compliance checklist checks...</p>
+              <span class="cap-action-btn">View Subpoints <i class="fa-solid fa-arrow-right"></i></span>
+            </div>
+            <!-- 7 -->
+            <div class="capability-card" data-capability="post-construction" style="grid-column: span 1; max-width: 100%;">
+              <div class="cap-num">07</div>
+              <h3>Post-Construction Services</h3>
+              <p>Snag list inspections, deep cleaning, occupancy certificate documentation transfers...</p>
+              <span class="cap-action-btn">View Subpoints <i class="fa-solid fa-arrow-right"></i></span>
             </div>
           </div>
         </div>
@@ -1036,17 +1055,17 @@
           <div class="contact-card-box">
             <div class="contact-box-icon text-red"><i class="fa-solid fa-map-pin"></i></div>
             <h3>Our Office</h3>
-            <p>123, Builders Street,<br>Hyderabad - 500001,<br>Telangana, India</p>
+            <p>B-23, F-4, Osmania university road,<br>vidyanagar, vignanapuri colony,<br>Hyderabad, Telangana - 500044</p>
           </div>
           <div class="contact-card-box">
             <div class="contact-box-icon text-blue"><i class="fa-solid fa-phone"></i></div>
             <h3>Call Us</h3>
-            <p><a href="tel:+919392168888">+91 93921 68888</a><br><a href="tel:+914012345678">+91 40 1234 5678</a></p>
+            <p><a href="tel:+919392168888">+91 93921 68888</a><br><a href="tel:+919440039858">+91 94400 39858</a><br><a href="tel:04035180410">040 35180410</a></p>
           </div>
           <div class="contact-card-box">
             <div class="contact-box-icon text-red"><i class="fa-solid fa-envelope"></i></div>
             <h3>Email Us</h3>
-            <p><a href="mailto:info@jeshurunbuilders.com">info@jeshurunbuilders.com</a><br><a href="mailto:sales@jeshurunbuilders.com">sales@jeshurunbuilders.com</a></p>
+            <p><a href="mailto:jeshurunbuildersndevelopers@gmail.com">jeshurunbuildersndevelopers<br>@gmail.com</a></p>
           </div>
           <div class="contact-card-box">
             <div class="contact-box-icon text-blue"><i class="fa-solid fa-clock"></i></div>
@@ -1085,9 +1104,9 @@
                     <select required class="form-input select-project-type">
                       <option value="" disabled selected>Select option</option>
                       <option value="Residential">Residential Construction</option>
-                      <option value="Commercial">Commercial Projects</option>
-                      <option value="Management">Construction Management</option>
-                      <option value="Architecture">Architecture & Design</option>
+                      <option value="Commercial">Commercial Construction</option>
+                      <option value="Property">Property Development</option>
+                      <option value="Plots">Open Venture Plots</option>
                     </select>
                   </div>
                 </div>
@@ -1109,12 +1128,7 @@
             <!-- Right Card Info Box -->
             <div class="contact-side-image-card text-white p-lg rounded position-relative overflow-hidden" style="background-image: linear-gradient(rgba(11, 26, 48, 0.85), rgba(11, 26, 48, 0.85)), url('https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&w=600&q=80'); background-size: cover; background-position: center; display: flex; flex-direction: column; justify-content: space-between;">
               <div class="card-logo-badge">
-                <svg class="brand-logo-svg white-svg" viewBox="0 0 100 100" width="60" height="60">
-                  <polygon points="50,5 92,27 92,73 50,95 8,73 8,27" fill="none" stroke="#ffffff" stroke-width="4"/>
-                  <path d="M30,22 H42 V62 Q42,75 30,75 Q18,75 18,62 H30 Q30,65 30,62 L30,35 H25 V22 Z" fill="#ffffff"/>
-                  <path d="M48,22 H68 Q78,22 78,33 Q78,41 70,44 Q78,46 78,57 Q78,68 68,68 H48 Z M60,32 V40 H66 Q69,40 69,36 Q69,32 66,32 Z M60,49 V58 H66 Q69,58 69,53.5 Q69,49 66,49 Z" fill="#d32f2f"/>
-                  <polygon points="50,11 68,22 32,22" fill="#d32f2f"/>
-                </svg>
+                <img src="image copy 6.png" alt="Jeshurun Logo" class="brand-logo-img white-bg-logo">
               </div>
               <div class="side-card-body">
                 <h3>We would love to hear from you!</h3>
@@ -1133,7 +1147,7 @@
             <div class="map-marker-pin"><i class="fa-solid fa-location-dot"></i></div>
             <div class="map-marker-info">
               <h5>Jeshurun Builder's & Developer's</h5>
-              <p>Somajiguda, Hyderabad</p>
+              <p>Vidyanagar, Hyderabad</p>
               <p>Click to open Navigation Route</p>
             </div>
           </div>
@@ -1160,12 +1174,7 @@
       <div class="footer-brand-col">
         <a href="#home" class="brand-logo" id="footer-logo-link">
           <div class="logo-wrapper">
-            <svg class="brand-logo-svg" viewBox="0 0 100 100" width="38" height="38">
-              <polygon points="50,5 92,27 92,73 50,95 8,73 8,27" fill="none" stroke="#ffffff" stroke-width="4"/>
-              <path d="M30,22 H42 V62 Q42,75 30,75 Q18,75 18,62 H30 Q30,65 30,62 L30,35 H25 V22 Z" fill="#ffffff"/>
-              <path d="M48,22 H68 Q78,22 78,33 Q78,41 70,44 Q78,46 78,57 Q78,68 68,68 H48 Z M60,32 V40 H66 Q69,40 69,36 Q69,32 66,32 Z M60,49 V58 H66 Q69,58 69,53.5 Q69,49 66,49 Z" fill="#d32f2f"/>
-              <polygon points="50,11 68,22 32,22" fill="#d32f2f"/>
-            </svg>
+            <img src="image copy 6.png" alt="Jeshurun Logo" class="brand-logo-img white-bg-logo">
           </div>
           <div class="brand-text">
             <span class="brand-name text-white">JESHURUN</span>
@@ -1196,11 +1205,9 @@
         <h4>OUR SERVICES</h4>
         <ul>
           <li><a href="#services" data-target="services">Residential Construction</a></li>
-          <li><a href="#services" data-target="services">Commercial Projects</a></li>
-          <li><a href="#services" data-target="services">Construction Management</a></li>
-          <li><a href="#services" data-target="services">Architecture & Design</a></li>
-          <li><a href="#services" data-target="services">Interior Solutions</a></li>
-          <li><a href="#services" data-target="services">Turnkey Projects</a></li>
+          <li><a href="#services" data-target="services">Commercial Construction</a></li>
+          <li><a href="#services" data-target="services">Property Development</a></li>
+          <li><a href="#services" data-target="services">Open Venture Plots</a></li>
         </ul>
       </div>
       <!-- Contact Info -->
@@ -1208,8 +1215,10 @@
         <h4>CONTACT INFO</h4>
         <ul class="footer-contact-list">
           <li><i class="fa-solid fa-phone"></i> +91 93921 68888</li>
-          <li><i class="fa-solid fa-envelope"></i> info@jeshurunbuilders.com</li>
-          <li><i class="fa-solid fa-map-location-dot"></i> 123, Builders Street, Hyderabad - 500001, Telangana, India</li>
+          <li><i class="fa-solid fa-phone"></i> +91 94400 39858</li>
+          <li><i class="fa-solid fa-phone"></i> 040 35180410</li>
+          <li><i class="fa-solid fa-envelope"></i> jeshurunbuildersndevelopers@gmail.com</li>
+          <li><i class="fa-solid fa-map-location-dot"></i> B-23, F-4, Osmania university road, vidyanagar, vignanapuri colony, Hyderabad, Telangana - 500044</li>
         </ul>
       </div>
     </div>
@@ -1217,7 +1226,7 @@
     <div class="footer-bottom-credits">
       <div class="container grid grid-2-col">
         <div>
-          <p>&copy; 2026 Jeshurun Builder's & Developer's Pvt. Ltd. All Rights Reserved.</p>
+          <p>&copy; 2026 Jeshurun Builder's & Developer's Pvt. Ltd. All Rights Reserved. | <a href="http://WWW.JESHURUNPVTLTD.COM" target="_blank" rel="noopener noreferrer">WWW.JESHURUNPVTLTD.COM</a></p>
         </div>
         <div class="text-right text-center-mobile">
           <p><a href="#">Privacy Policy</a> | <a href="#">Terms & Conditions</a></p>
@@ -1275,6 +1284,29 @@
           </div>
           <a href="#contact" class="btn btn-primary" id="lightbox-cta-btn">Enquire About This Project <i class="fa-solid fa-arrow-right"></i></a>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- INTERACTIVE CAPABILITY DETAILS PANEL MODAL -->
+  <div class="capability-modal" id="capability-modal">
+    <button class="cap-close-btn" id="cap-close" aria-label="Close Panel">&times;</button>
+    <div class="cap-modal-container">
+      <div class="cap-modal-header">
+        <div class="cap-modal-num" id="cap-modal-num">01</div>
+        <h2 id="cap-modal-title">Capability Title</h2>
+      </div>
+      <div class="cap-modal-body">
+        <div class="cap-modal-desc-block">
+          <p id="cap-modal-desc">Detailed capability description goes here...</p>
+        </div>
+        <div class="cap-points-list-container">
+          <h4>Key Sub-sections & Points</h4>
+          <ul class="cap-points-list" id="cap-points-list">
+            <!-- Dynamically populated -->
+          </ul>
+        </div>
+        <a href="#contact" class="btn btn-primary cap-modal-cta" id="cap-modal-cta-btn">Discuss This Capability <i class="fa-solid fa-arrow-right"></i></a>
       </div>
     </div>
   </div>
