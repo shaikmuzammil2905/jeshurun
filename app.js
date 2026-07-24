@@ -9,6 +9,10 @@ document.addEventListener('DOMContentLoaded', () => {
   // ==========================================================================
   // 1. SINGLE PAGE ROUTER WITH CURTAIN SWEEP TRANSITION
   // ==========================================================================
+  // Initialize Supabase Client
+  const { createClient } = window.supabase;
+  const supabase = createClient(window.ENV.SUPABASE_URL, window.ENV.SUPABASE_ANON_KEY);
+
   const viewSections = document.querySelectorAll('.view-section');
   const transitionOverlay = document.getElementById('page-transition-overlay');
   let isNavigating = false;
@@ -30,13 +34,40 @@ document.addEventListener('DOMContentLoaded', () => {
       'gallery-commercial': 'gallery-commercial-view',
       'gallery-interior': 'gallery-interior-view',
       'gallery-progress': 'gallery-progress-view',
-      'gallery-completed': 'gallery-completed-view'
+      'gallery-completed': 'gallery-completed-view',
+      'admin': 'admin-view'
     };
 
     const activeViewId = routeMap[route] || 'home-view';
     const activeViewEl = document.getElementById(activeViewId);
     
     if (!activeViewEl) return;
+
+    // Check permissions for gated routes
+    if (route === 'brochure') {
+      const isLoggedIn = localStorage.getItem('jeshurun_user');
+      const authContainer = document.getElementById('brochure-auth-container');
+      const brochureContainer = document.getElementById('brochure-container');
+      if (isLoggedIn) {
+        if (authContainer) authContainer.style.display = 'none';
+        if (brochureContainer) brochureContainer.style.display = 'block';
+      } else {
+        if (authContainer) authContainer.style.display = 'flex';
+        if (brochureContainer) brochureContainer.style.display = 'none';
+      }
+    } else if (route === 'admin') {
+      const isAdmin = localStorage.getItem('jeshurun_admin');
+      const adminAuth = document.getElementById('admin-auth-container');
+      const adminDashboard = document.getElementById('admin-dashboard-container');
+      if (isAdmin) {
+        if (adminAuth) adminAuth.style.display = 'none';
+        if (adminDashboard) adminDashboard.style.display = 'block';
+        loadAdminDashboardData();
+      } else {
+        if (adminAuth) adminAuth.style.display = 'flex';
+        if (adminDashboard) adminDashboard.style.display = 'none';
+      }
+    }
 
     // If curtain transition is available, perform sweep animation
     if (transitionOverlay && !isNavigating) {
@@ -90,7 +121,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const validRoutes = { 
           'home': 1, 'about': 1, 'projects': 1, 'services': 1, 'brochure': 1, 'gallery': 1, 'contact': 1,
           'gallery-residential': 1, 'gallery-commercial': 1, 'gallery-interior': 1,
-          'gallery-progress': 1, 'gallery-completed': 1
+          'gallery-progress': 1, 'gallery-completed': 1, 'admin': 1
         };
         
         if (targetView in validRoutes) {
@@ -122,7 +153,7 @@ document.addEventListener('DOMContentLoaded', () => {
     burgerToggle.addEventListener('click', () => {
       burgerToggle.classList.toggle('active');
       mobileOverlay.classList.toggle('active');
-      
+
       const spans = burgerToggle.querySelectorAll('span');
       if (burgerToggle.classList.contains('active')) {
         spans[0].style.transform = 'rotate(45deg) translate(5px, 5px)';
@@ -168,7 +199,7 @@ document.addEventListener('DOMContentLoaded', () => {
     currentSlideIndex = (index + heroSlides.length) % heroSlides.length;
     heroSlides[currentSlideIndex].classList.add('active');
     slideDots[currentSlideIndex].classList.add('active');
-    
+
     const title = heroSlides[currentSlideIndex].querySelector('.hero-title');
     if (title && title.classList.contains('animated-text')) {
       animateLetters(title);
@@ -214,9 +245,9 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!startTime) startTime = currentTime;
         const progress = Math.min((currentTime - startTime) / duration, 1);
         const currentValue = Math.floor(progress * target);
-        
+
         counter.textContent = currentValue;
-        
+
         if (progress < 1) {
           requestAnimationFrame(updateCounter);
         } else {
@@ -247,17 +278,17 @@ document.addEventListener('DOMContentLoaded', () => {
   function animateLetters(headingElement) {
     if (!headingElement) return;
     if (headingElement.querySelector('.char-span')) return;
-    
+
     const textContent = headingElement.textContent;
     headingElement.innerHTML = '';
-    
+
     const words = textContent.split(' ');
     words.forEach((word, wordIdx) => {
       const wordSpan = document.createElement('span');
       wordSpan.style.display = 'inline-block';
       wordSpan.style.whiteSpace = 'nowrap';
       wordSpan.style.marginRight = '8px';
-      
+
       const chars = word.split('');
       chars.forEach((char, charIdx) => {
         const charSpan = document.createElement('span');
@@ -278,7 +309,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (mainTitle) {
       animateLetters(mainTitle);
     }
-    
+
     // Check scroll trigger elements visibility immediately
     setTimeout(checkScrollTriggerElements, 50);
   }
@@ -371,7 +402,7 @@ document.addEventListener('DOMContentLoaded', () => {
     capTitle.textContent = data.title;
     capNum.textContent = data.num;
     capDesc.textContent = data.desc;
-    
+
     // Clear list
     capPointsList.innerHTML = '';
     data.points.forEach(pointText => {
@@ -523,12 +554,12 @@ document.addEventListener('DOMContentLoaded', () => {
       const slide = document.createElement('div');
       slide.style.minWidth = '100%';
       slide.style.height = '100%';
-      
+
       const img = document.createElement('img');
       img.src = imgUrl;
       img.alt = data.title;
       img.classList.add('lightbox-slide-img');
-      
+
       slide.appendChild(img);
       slidesTrack.appendChild(slide);
     });
@@ -598,11 +629,11 @@ document.addEventListener('DOMContentLoaded', () => {
   // ==========================================================================
   function setupGalleryRedirectFilters() {
     const filterButtons = document.querySelectorAll('.gallery-filters-row .filter-btn');
-    
+
     filterButtons.forEach(btn => {
       btn.addEventListener('click', (e) => {
         const filterVal = e.target.getAttribute('data-filter');
-        
+
         // Skip projects view filters
         const parentFilterRow = e.target.closest('.gallery-filters-row');
         if (parentFilterRow && parentFilterRow.id === 'projects-view-filters') {
@@ -668,7 +699,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const email = form.querySelector('.text-input-email').value.trim();
       const projectType = form.querySelector('.select-project-type').value;
       const message = form.querySelector('.text-textarea-msg').value.trim();
-      
+
       const subjectInput = form.querySelector('.text-input-subject');
       const subject = subjectInput ? subjectInput.value.trim() : 'Project Inquiry';
 
@@ -797,23 +828,23 @@ document.addEventListener('DOMContentLoaded', () => {
   const brochureDots = document.querySelectorAll('.brochure-dot');
   const prevBrochureBtn = document.querySelector('.brochure-prev');
   const nextBrochureBtn = document.querySelector('.brochure-next');
-  
+
   function showBrochureSlide(idx) {
     if (brochureSlides.length === 0) return;
-    
+
     brochureSlides.forEach((slide, i) => {
       slide.classList.remove('active');
       if (brochureDots[i]) brochureDots[i].classList.remove('active');
     });
-    
+
     currentBrochureSlide = (idx + brochureSlides.length) % brochureSlides.length;
     brochureSlides[currentBrochureSlide].classList.add('active');
     if (brochureDots[currentBrochureSlide]) brochureDots[currentBrochureSlide].classList.add('active');
-    
+
     const activeSlide = brochureSlides[currentBrochureSlide];
     activeSlide.scrollTop = 0;
   }
-  
+
   if (brochureSlides.length > 0) {
     if (nextBrochureBtn) {
       nextBrochureBtn.addEventListener('click', () => {
@@ -830,7 +861,7 @@ document.addEventListener('DOMContentLoaded', () => {
         showBrochureSlide(i);
       });
     });
-    
+
     document.addEventListener('keydown', (e) => {
       const brochureView = document.getElementById('brochure-view');
       if (brochureView && brochureView.classList.contains('active')) {
@@ -841,8 +872,847 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       }
     });
-    
+
     showBrochureSlide(0);
   }
+
+
+  // ==========================================================================
+  // 15. SUPABASE DATA LAYER & SEEDER
+  // ==========================================================================
+
+  const DEFAULT_GALLERY = [
+    { category: 'gallery-residential', img_url: 'https://images.unsplash.com/photo-1613490493576-7fde63acd811?auto=format&fit=crop&w=600&q=80', alt: 'Luxury Villa Exterior' },
+    { category: 'gallery-commercial', img_url: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=600&q=80', alt: 'Glass Facade Corporate Headquarters' },
+    { category: 'gallery-interior', img_url: 'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=600&q=80', alt: 'Modern Living Room Interior' },
+    { category: 'gallery-progress', img_url: 'https://images.unsplash.com/photo-1541888946425-d81bb19240f5?auto=format&fit=crop&w=600&q=80', alt: 'Foundation Concrete Pouring' },
+    { category: 'gallery-completed', img_url: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=600&q=80', alt: 'Completed Residential Block' },
+    { category: 'gallery-residential', img_url: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=600&q=80', alt: 'High-end Contemporary Villa' }
+  ];
+
+  const DEFAULT_TEAM = [
+    { name: 'G. PRASAD', role: 'MD / Founder', img_url: 'image copy 25.png', display_order: 1 },
+    { name: 'Sunil kumar pournal', role: 'Director', img_url: 'image copy 41.png', display_order: 2 },
+    { name: 'Sudhaker kedem', role: 'Manager', img_url: 'image copy 42.png', display_order: 3 },
+    { name: 'N. GAJU', role: 'Architect', img_url: 'image copy 44.png', display_order: 4 },
+    { name: 'Hameed uddin khan', role: 'Engineer', img_url: 'image copy 43.png', display_order: 5 },
+    { name: 'Sai Ganesh', role: 'Supervisor', img_url: 'image copy 45.png', display_order: 6 }
+  ];
+
+  const DEFAULT_BROCHURE_SLIDES = [
+    { title: 'Cover', type: 'image', img_url: 'image copy 22.png', specs: null, display_order: 1 },
+    { title: 'Intro', type: 'image', img_url: 'image copy 23.png', specs: null, display_order: 2 },
+    { title: 'Management Team', type: 'specs', img_url: null, specs: [], display_order: 3 },
+    { title: 'JDA Introduction', type: 'specs', img_url: null, specs: [
+      { title: 'Agreement Concept', items: ['A Joint Development Agreement (JDA) divides land value and construction costs to give both parties equal returns.', 'The catalogue details area sharing (splitting the built-up flats/villas), baseline specifications, and developer timeline in exchange for land.'] },
+      { title: 'The Division of Space', items: ['Residential Apartments: Developer designs multi-story/gated community. Flats are divided equally (e.g. builder takes floors 1 & 2, owner takes 3 & 4) with Undivided Share of Land (UDS).', 'Parking & Common Amenities: Basement/stilt parking slots distributed equally.', 'Terrace Rights: Split equally.'] },
+      { title: 'Initial Soil & Site Preparation', items: ['Earth excavation.', 'Soil investigation & testing by an NABL-certified lab.', 'Site survey before marking: levels studied, reference coordinates and grids marked.', 'Pillar and column marking based on soil conditions and foundation plan.'] }
+    ], display_order: 4 },
+    { title: 'Core Specifications & Civil Works', type: 'specs', img_url: null, specs: [
+      { title: 'RCC Structure', items: ['RCC (Reinforced cement concrete) design integrates steel reinforcement for footings, beams, columns, and slabs as per design.', 'RCC staircase with 6" thickness soffit slab.', 'JSW steel rods used as per structural design.', 'Ultra tech 53 grade cement for slabs, columns, beams; Birla 43 grade for brickwork/plastering.', `Ceiling height 10'5" (slab to slab top).`, `Plinth beam max 2' height from natural ground level.`, 'Sunken slabs for toilets.'] },
+      { title: 'Super Structure & Plastering', items: ['Red mud bricks in cement mortar for wall support (external walls 9", internal walls 4.5" with concrete bed).', 'Install chicken mesh (200-300mm wide) over joints before plastering.', 'Double-coat external plastering 18mm thick; internal plastering 12mm thick.'] }
+    ], display_order: 5 },
+    { title: 'Doors, Windows & Flooring', type: 'specs', img_url: null, specs: [
+      { title: 'Doors & Frames', items: ['Main door frame BT teak section (5"x7") with teak veneer shutter (36mm or 42mm).', 'Godrej locks, hinges 5" long, 12" brass doorset.', `Main door size 5' width, 7' height.`, 'Internal door frames MT section (4"x3") with laminate-finished flush shutters (32mm).', 'WPC frames and doors (30mm) for washrooms.', `Bedroom doors 3' width, 6'5" height. Washroom doors 3' width, 6'5" height.`] },
+      { title: 'Windows & Flooring', items: ['Windows UPVC Vaka, Domal or equivalent with sliding 3-track design and SS mosquito mesh.', 'Ventilators UPVC frame with glass louvres (16"x20") fixed at beam bottom.', 'All internal flooring vitrified tiles (Kajaria/Johnson). Staircase with lapatra black/brown granite. Parking with rough granite.'] }
+    ], display_order: 6 },
+    { title: 'Kitchen, Toilet & Plumbing Lines', type: 'specs', img_url: null, specs: [
+      { title: 'Kitchen & Toilet Setup', items: ['Elephant black granite platform with sink & tap.', 'Ceramic tile cladding up to 2 feet height over kitchen platform.', 'Ashirvad CPVC water supply pipes; Sudhakar PVC drainage pipes.', `Toilet flooring with anti-skid ceramic tiles (1'x1').`, `Wall ceramic tiles up to lintel level (1'x2').`, 'Dr. Fixit/Fosroc waterproofing in washrooms, utility and terrace.'] },
+      { title: 'Drainage & Sanitaryware', items: ['Sanitaryware: Hindware, Parryware or Cera.', 'EWC wall mounted with PVC cistern. Health faucet, wash basin with countertop.', 'Bib cock with nozzle for washing machine. Angle cocks for geyser, kitchen, etc.'] }
+    ], display_order: 7 },
+    { title: 'Finishes, Electrical & Services', type: 'specs', img_url: null, specs: [
+      { title: 'Railing, Painting & Polish', items: ['Glass railing 10mm to 12mm toughened glass with SS 304 supports.', 'MS sliding gate with panel locks. MS safety grills for windows.', 'Interior: 2 coats putty, 1 coat primer, 2 coats Premium Emulsion.', 'Exterior: Weather-proof exterior paints.', 'Water supply: Borewell and municipal water sump tank (10000L).'] },
+      { title: 'Electrical & Lift Operations', items: ['Concealed conduit copper wiring (PolyCab/Finolex, Sudhakar pipes).', 'Modular switches (GM, Legrand or Anchor Roma). DB with MCB of Legrand.', 'AC points in bedrooms & hall; geyser points in toilets.', 'Lift planning and installation solutions compliant with industry standards.'] }
+    ], display_order: 8 },
+    { title: 'Closing', type: 'image', img_url: 'image copy 26.png', specs: null, display_order: 9 }
+  ];
+
+  async function seedDatabaseIfEmpty() {
+    try {
+      // Seed gallery
+      const { data: galData } = await supabase.from('gallery').select('id').limit(1);
+      if (!galData || galData.length === 0) {
+        await supabase.from('gallery').insert(DEFAULT_GALLERY);
+      }
+
+      // Seed team
+      const { data: teamData } = await supabase.from('team').select('id').limit(1);
+      if (!teamData || teamData.length === 0) {
+        await supabase.from('team').insert(DEFAULT_TEAM);
+      }
+
+      // Seed brochure slides
+      const { data: slideData } = await supabase.from('brochure_slides').select('id').limit(1);
+      if (!slideData || slideData.length === 0) {
+        await supabase.from('brochure_slides').insert(DEFAULT_BROCHURE_SLIDES);
+      }
+    } catch (e) {
+      console.warn("Seeding database failed or skipped:", e);
+    }
+  }
+
+  async function renderDynamicContent() {
+    try {
+      // 1. Fetch & Render Team Members
+      let teamMembers = null;
+      try {
+        const { data } = await supabase.from('team').select('*').order('display_order', { ascending: true });
+        teamMembers = data;
+      } catch (err) {
+        console.warn("Failed to fetch team from Supabase, using defaults:", err);
+      }
+      if (!teamMembers || teamMembers.length === 0) {
+        teamMembers = DEFAULT_TEAM;
+      }
+
+      // Render main team section
+      const mainTeamGrid = document.querySelector('#about-view .team-grid');
+      if (mainTeamGrid) {
+        mainTeamGrid.innerHTML = teamMembers.map(member => `
+          <div class="team-card">
+            <div class="team-img-h">
+              <img src="${member.img_url}" alt="${member.name}">
+            </div>
+            <div class="team-body">
+              <h4>${member.name}</h4>
+              <p>${member.role}</p>
+            </div>
+          </div>
+        `).join('');
+      }
+
+      // Render brochure slide #3 (Management Team slide)
+      const brochureTeamGrid = document.querySelector('.brochure-team-grid');
+      if (brochureTeamGrid) {
+        brochureTeamGrid.innerHTML = teamMembers.map(member => `
+          <div class="brochure-team-card">
+            <div class="brochure-team-img-wrapper">
+              <img src="${member.img_url}" alt="${member.name}">
+            </div>
+            <div class="brochure-team-body">
+              <p><strong>${member.role.toUpperCase()}</strong></p>
+              <h4>${member.name}</h4>
+            </div>
+          </div>
+        `).join('');
+      }
+
+      // 2. Fetch & Render Gallery
+      let galleryItems = null;
+      try {
+        const { data } = await supabase.from('gallery').select('*').order('created_at', { ascending: false });
+        galleryItems = data;
+      } catch (err) {
+        console.warn("Failed to fetch gallery from Supabase, using defaults:", err);
+      }
+      if (!galleryItems || galleryItems.length === 0) {
+        galleryItems = DEFAULT_GALLERY;
+      }
+
+      const getCategoryLabel = (cat) => {
+        const labels = {
+          'gallery-residential': 'Residential',
+          'gallery-commercial': 'Commercial',
+          'gallery-interior': 'Interior',
+          'gallery-progress': 'Construction Progress',
+          'gallery-completed': 'Completed'
+        };
+        return labels[cat] || 'Project';
+      };
+
+      const renderGrid = (gridEl, items) => {
+        if (!gridEl) return;
+        gridEl.innerHTML = items.map(item => `
+          <div class="gallery-item" data-category="${item.category}">
+            <img src="${item.img_url}" alt="${item.alt}">
+            <div class="gallery-item-hover"><i class="fa-solid fa-magnifying-glass-plus"></i></div>
+          </div>
+        `).join('');
+      };
+
+      // Render home page projects preview
+      const homeGrid = document.querySelector('#home-view .gallery-grid');
+      if (homeGrid) renderGrid(homeGrid, galleryItems.slice(0, 6));
+
+      // Render main gallery view grid
+      const mainGrid = document.getElementById('gallery-view-grid');
+      if (mainGrid) renderGrid(mainGrid, galleryItems);
+
+      // Render categories specific pages
+      const categories = ['gallery-residential', 'gallery-commercial', 'gallery-interior', 'gallery-progress', 'gallery-completed'];
+      const viewGrids = document.querySelectorAll('.view-section .gallery-grid');
+      viewGrids.forEach(grid => {
+        if (grid.id === 'gallery-view-grid') return;
+        // Check parent section route
+        const parentSection = grid.closest('.view-section');
+        if (parentSection) {
+          const secId = parentSection.id; // e.g. gallery-residential-view
+          const cat = secId.replace('-view', ''); // e.g. gallery-residential
+          if (categories.includes(cat)) {
+            const filtered = galleryItems.filter(item => item.category === cat);
+            renderGrid(grid, filtered);
+          }
+        }
+      });
+
+      // 3. Fetch & Render Brochure Slides
+      let slides = null;
+      try {
+        const { data } = await supabase.from('brochure_slides').select('*').order('display_order', { ascending: true });
+        slides = data;
+      } catch (err) {
+        console.warn("Failed to fetch brochure slides from Supabase, using defaults:", err);
+      }
+      if (!slides || slides.length === 0) {
+        slides = DEFAULT_BROCHURE_SLIDES;
+      }
+
+      const sliderWrapper = document.querySelector('.brochure-slider-wrapper');
+      const dotsContainer = document.querySelector('.brochure-dots-container');
+      
+      if (sliderWrapper && dotsContainer) {
+        sliderWrapper.innerHTML = '';
+        dotsContainer.innerHTML = '';
+
+        slides.forEach((slide, idx) => {
+          let slideHtml = '';
+          const isActive = idx === 0 ? 'active' : '';
+
+          if (slide.type === 'image') {
+            slideHtml = `
+              <div class="brochure-slide ${isActive}">
+                <img src="${slide.img_url}" alt="${slide.title}" class="brochure-cover-img">
+              </div>
+            `;
+          } else if (slide.title === 'Management Team') {
+            slideHtml = `
+              <div class="brochure-slide ${isActive}">
+                <div class="brochure-slide-inner">
+                  <h3>${slide.title}</h3>
+                  <div class="brochure-team-grid">
+                    <!-- Rendered dynamically above -->
+                  </div>
+                </div>
+              </div>
+            `;
+          } else {
+            // Parse specifications
+            let specsData = [];
+            try {
+              specsData = typeof slide.specs === 'string' ? JSON.parse(slide.specs) : slide.specs;
+            } catch (e) {
+              specsData = slide.specs || [];
+            }
+
+            const specCols = specsData.map(col => `
+              <div class="brochure-spec-col">
+                <h4>${col.title}</h4>
+                <ul>
+                  ${col.items.map(item => `<li>${item}</li>`).join('')}
+                </ul>
+              </div>
+            `).join('');
+
+            slideHtml = `
+              <div class="brochure-slide ${isActive}">
+                <div class="brochure-slide-inner">
+                  <h3>${slide.title}</h3>
+                  <div class="brochure-spec-grid">
+                    ${specCols}
+                  </div>
+                </div>
+              </div>
+            `;
+          }
+
+          sliderWrapper.insertAdjacentHTML('beforeend', slideHtml);
+          dotsContainer.insertAdjacentHTML('beforeend', `
+            <span class="brochure-dot ${isActive}" data-index="${idx}"></span>
+          `);
+        });
+
+        // Re-bind click event handlers for the newly rendered slides
+        rebindBrochureSliderEvents();
+      }
+    } catch (e) {
+      console.error("Error rendering dynamic website data:", e);
+    }
+  }
+
+  function rebindBrochureSliderEvents() {
+    let currentSlide = 0;
+    const slides = document.querySelectorAll('.brochure-slide');
+    const dots = document.querySelectorAll('.brochure-dot');
+    const prevBtn = document.querySelector('.brochure-prev');
+    const nextBtn = document.querySelector('.brochure-next');
+
+    function showSlide(idx) {
+      if (slides.length === 0) return;
+      slides.forEach((slide, i) => {
+        slide.classList.remove('active');
+        if (dots[i]) dots[i].classList.remove('active');
+      });
+      currentSlide = (idx + slides.length) % slides.length;
+      slides[currentSlide].classList.add('active');
+      if (dots[currentSlide]) dots[currentSlide].classList.add('active');
+    }
+
+    if (slides.length > 0) {
+      if (nextBtn) {
+        nextBtn.onclick = () => showSlide(currentSlide + 1);
+      }
+      if (prevBtn) {
+        prevBtn.onclick = () => showSlide(currentSlide - 1);
+      }
+      dots.forEach((dot, i) => {
+        dot.onclick = () => showSlide(i);
+      });
+      showSlide(0);
+    }
+  }
+
+  // Handle clicking gallery items for lightbox (Delegation)
+  document.body.addEventListener('click', (e) => {
+    const item = e.target.closest('.gallery-item');
+    if (item) {
+      const cat = item.getAttribute('data-category');
+      const projectMap = {
+        'gallery-residential': 'luxury-villa',
+        'gallery-commercial': 'commercial-complex',
+        'gallery-interior': 'corporate-hq',
+        'gallery-progress': 'luxury-penthouses',
+        'gallery-completed': 'modern-residence'
+      };
+      const prjId = projectMap[cat] || 'luxury-villa';
+      openProjectLightbox(prjId);
+    }
+  });
+
+
+  // ==========================================================================
+  // 16. BROCHURE VISITOR SIGNUP / LEAD CAPTURE
+  // ==========================================================================
+
+  const brochureAuthForm = document.getElementById('brochure-auth-form');
+  if (brochureAuthForm) {
+    brochureAuthForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const btn = brochureAuthForm.querySelector('button[type="submit"]');
+      const name = document.getElementById('lead-name').value.trim();
+      const email = document.getElementById('lead-email').value.trim();
+      const phone = document.getElementById('lead-phone').value.trim();
+
+      btn.disabled = true;
+      btn.innerHTML = 'PROCESSING... <i class="fa-solid fa-spinner fa-spin"></i>';
+
+      try {
+        // Save lead in Supabase (non-blocking fallback)
+        try {
+          const { error } = await supabase
+            .from('leads')
+            .insert([{ name, email, phone }]);
+          if (error) console.warn("Supabase lead insert warning:", error);
+        } catch (dbErr) {
+          console.warn("Supabase lead insert failed, skipped:", dbErr);
+        }
+
+        // Save session locally
+        localStorage.setItem('jeshurun_user', JSON.stringify({ name, email, phone }));
+
+        // Send WhatsApp prefilled lead text in a new tab (gracefully handle popup blockers)
+        try {
+          const msg = `Hello Jeshurun Builders, I have registered to download your brochure. Name: ${name}, Email: ${email}, Phone: ${phone}`;
+          const waUrl = `https://wa.me/919392168888?text=${encodeURIComponent(msg)}`;
+          const win = window.open(waUrl, '_blank');
+          if (!win) {
+            console.warn("WhatsApp popup was blocked by the browser.");
+          }
+        } catch (popupErr) {
+          console.warn("Failed to open WhatsApp tab:", popupErr);
+        }
+
+        // Unlock brochure panel
+        const authContainer = document.getElementById('brochure-auth-container');
+        const brochureContainer = document.getElementById('brochure-container');
+        if (authContainer) authContainer.style.display = 'none';
+        if (brochureContainer) {
+          brochureContainer.style.display = 'block';
+          rebindBrochureSliderEvents();
+        }
+      } catch (err) {
+        console.error("Lead saving failed:", err);
+        alert("An error occurred during registration. Please try again.");
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = 'ACCESS BROCHURE <i class="fa-solid fa-unlock-keyhole"></i>';
+      }
+    });
+  }
+
+
+  // ==========================================================================
+  // 17. ADMIN DASHBOARD OPERATIONS (CRUD & UPLOADS)
+  // ==========================================================================
+
+  const adminLoginForm = document.getElementById('admin-login-form');
+  const adminLogoutBtn = document.getElementById('btn-admin-logout');
+
+  // Handle Admin Authentication
+  if (adminLoginForm) {
+    adminLoginForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const email = document.getElementById('admin-email').value.trim();
+      const pass = document.getElementById('admin-password').value.trim();
+      const errorMsg = document.getElementById('admin-auth-error');
+
+      if (email === 'admin@jeshurun.com' && pass === 'Admin@123') {
+        localStorage.setItem('jeshurun_admin', 'true');
+        errorMsg.style.display = 'none';
+        document.getElementById('admin-auth-container').style.display = 'none';
+        document.getElementById('admin-dashboard-container').style.display = 'block';
+        loadAdminDashboardData();
+      } else {
+        errorMsg.style.display = 'block';
+      }
+    });
+  }
+
+  if (adminLogoutBtn) {
+    adminLogoutBtn.addEventListener('click', () => {
+      localStorage.removeItem('jeshurun_admin');
+      document.getElementById('admin-dashboard-container').style.display = 'none';
+      document.getElementById('admin-auth-container').style.display = 'flex';
+      window.location.hash = '#home';
+    });
+  }
+
+  // Tab Switch logic in Admin View
+  const tabButtons = document.querySelectorAll('.admin-tab-btn');
+  const tabPanels = document.querySelectorAll('.admin-tab-content');
+
+  tabButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      tabButtons.forEach(b => b.classList.remove('active'));
+      tabPanels.forEach(p => p.classList.remove('active'));
+
+      btn.classList.add('active');
+      const targetPanel = document.getElementById(btn.getAttribute('data-tab'));
+      if (targetPanel) targetPanel.classList.add('active');
+    });
+  });
+
+  async function loadAdminDashboardData() {
+    loadLeads();
+    loadGalleryItems();
+    loadTeamMembers();
+    loadBrochureSlides();
+  }
+
+  // --- LEADS SECTION ---
+  async function loadLeads() {
+    const tbody = document.getElementById('leads-table-body');
+    if (!tbody) return;
+
+    const { data: leads, error } = await supabase
+      .from('leads')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      tbody.innerHTML = `<tr><td colspan="5" class="text-center text-red">Failed to load leads.</td></tr>`;
+      return;
+    }
+
+    if (!leads || leads.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="5" class="text-center text-muted">No leads found.</td></tr>`;
+      return;
+    }
+
+    tbody.innerHTML = leads.map(lead => {
+      const date = new Date(lead.created_at).toLocaleDateString(undefined, {
+        year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit'
+      });
+      return `
+        <tr>
+          <td>${date}</td>
+          <td><strong>${lead.name}</strong></td>
+          <td>${lead.email}</td>
+          <td>${lead.phone}</td>
+          <td>
+            <a href="https://wa.me/${lead.phone.replace(/[^0-9]/g, '')}?text=Hello%20${encodeURIComponent(lead.name)},%20thanks%20for%20registering%20with%20Jeshurun%20Builders." 
+               target="_blank" class="btn-icon btn-chat-wa">
+               <i class="fa-brands fa-whatsapp"></i> Chat
+            </a>
+          </td>
+        </tr>
+      `;
+    }).join('');
+  }
+
+  // --- GALLERY MANAGEMENT ---
+  async function loadGalleryItems() {
+    const tbody = document.getElementById('gallery-table-body');
+    if (!tbody) return;
+
+    const { data: items, error } = await supabase.from('gallery').select('*').order('created_at', { ascending: false });
+    if (error) {
+      tbody.innerHTML = `<tr><td colspan="4" class="text-center text-red">Failed to load gallery.</td></tr>`;
+      return;
+    }
+
+    tbody.innerHTML = items.map(item => `
+      <tr>
+        <td><img src="${item.img_url}" width="60" height="40" style="object-fit: cover; border-radius: 4px;"></td>
+        <td><span class="gallery-tag">${item.category}</span></td>
+        <td>${item.alt}</td>
+        <td>
+          <button class="btn-icon btn-edit" onclick="editGalleryItem(${item.id}, '${item.category}', '${encodeURIComponent(item.alt)}', '${item.img_url}')"><i class="fa-solid fa-pen"></i> Edit</button>
+          <button class="btn-icon btn-delete" onclick="deleteGalleryItem(${item.id})"><i class="fa-solid fa-trash"></i> Delete</button>
+        </td>
+      </tr>
+    `).join('');
+  }
+
+  // --- TEAM MANAGEMENT ---
+  async function loadTeamMembers() {
+    const tbody = document.getElementById('team-table-body');
+    if (!tbody) return;
+
+    const { data: members, error } = await supabase.from('team').select('*').order('display_order', { ascending: true });
+    if (error) {
+      tbody.innerHTML = `<tr><td colspan="5" class="text-center text-red">Failed to load team.</td></tr>`;
+      return;
+    }
+
+    tbody.innerHTML = members.map(m => `
+      <tr>
+        <td><img src="${m.img_url}" width="40" height="45" style="object-fit: cover; border-radius: 50%;"></td>
+        <td><strong>${m.name}</strong></td>
+        <td>${m.role}</td>
+        <td>${m.display_order}</td>
+        <td>
+          <button class="btn-icon btn-edit" onclick="editTeamMember(${m.id}, '${encodeURIComponent(m.name)}', '${encodeURIComponent(m.role)}', '${m.img_url}', ${m.display_order})"><i class="fa-solid fa-pen"></i> Edit</button>
+          <button class="btn-icon btn-delete" onclick="deleteTeamMember(${m.id})"><i class="fa-solid fa-trash"></i> Delete</button>
+        </td>
+      </tr>
+    `).join('');
+  }
+
+  // --- BROCHURE MANAGEMENT ---
+  async function loadBrochureSlides() {
+    const tbody = document.getElementById('brochure-table-body');
+    if (!tbody) return;
+
+    const { data: slides, error } = await supabase.from('brochure_slides').select('*').order('display_order', { ascending: true });
+    if (error) {
+      tbody.innerHTML = `<tr><td colspan="4" class="text-center text-red">Failed to load brochure slides.</td></tr>`;
+      return;
+    }
+
+    tbody.innerHTML = slides.map(slide => `
+      <tr>
+        <td>
+          ${slide.type === 'image' 
+            ? `<img src="${slide.img_url}" width="60" height="40">` 
+            : `<span class="gallery-tag" style="background:#0b1a30;color:#fff;">SPECS SHEET</span>`
+          }
+        </td>
+        <td><strong>${slide.title}</strong></td>
+        <td>${slide.display_order}</td>
+        <td>
+          <button class="btn-icon btn-edit" onclick="editBrochureSlide(${slide.id}, '${encodeURIComponent(slide.title)}', '${slide.type}', '${slide.img_url || ''}', '${encodeURIComponent(JSON.stringify(slide.specs || []))}', ${slide.display_order})"><i class="fa-solid fa-pen"></i> Edit</button>
+          <button class="btn-icon btn-delete" onclick="deleteBrochureSlide(${slide.id})"><i class="fa-solid fa-trash"></i> Delete</button>
+        </td>
+      </tr>
+    `).join('');
+  }
+
+
+  // ==========================================================================
+  // 18. MODAL FORMS HANDLERS & IMAGE CLOUDINARY UPLOADS
+  // ==========================================================================
+
+  // Cloudinary Upload Utility
+  async function uploadToCloudinary(file, statusEl, urlInput) {
+    statusEl.innerHTML = 'Uploading... <i class="fa-solid fa-spinner fa-spin"></i>';
+    statusEl.style.color = 'var(--accent-cyan)';
+    
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('upload_preset', window.ENV.CLOUDINARY_UPLOAD_PRESET);
+
+    try {
+      const res = await fetch(`https://api.cloudinary.com/v1_1/${window.ENV.CLOUDINARY_CLOUD_NAME}/image/upload`, {
+        method: 'POST',
+        body: formData
+      });
+
+      if (!res.ok) throw new Error("Upload failed");
+      const data = await res.json();
+      
+      urlInput.value = data.secure_url;
+      statusEl.innerHTML = 'Upload success! <i class="fa-solid fa-circle-check"></i>';
+      statusEl.style.color = '#2e7d32';
+    } catch (e) {
+      console.error(e);
+      statusEl.innerHTML = 'Upload failed! <i class="fa-solid fa-circle-xmark"></i>';
+      statusEl.style.color = 'var(--primary-red)';
+      alert("Failed to upload image to Cloudinary. Please type or paste a direct URL instead.");
+    }
+  }
+
+  // --- GALLERY MODAL EVENTS ---
+  const galleryFileInput = document.getElementById('gallery-file-input');
+  if (galleryFileInput) {
+    galleryFileInput.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        document.getElementById('gallery-upload-status').textContent = file.name;
+        uploadToCloudinary(file, document.getElementById('gallery-upload-status'), document.getElementById('gallery-item-url'));
+      }
+    });
+  }
+
+  document.getElementById('btn-add-gallery-item').addEventListener('click', () => {
+    document.getElementById('gallery-modal-title').textContent = "Add Gallery Item";
+    document.getElementById('gallery-item-id').value = "";
+    document.getElementById('form-admin-gallery').reset();
+    document.getElementById('gallery-upload-status').textContent = "No file chosen";
+    document.getElementById('modal-admin-gallery').style.display = 'flex';
+  });
+
+  document.getElementById('btn-cancel-gallery').addEventListener('click', () => {
+    document.getElementById('modal-admin-gallery').style.display = 'none';
+  });
+
+  window.editGalleryItem = (id, category, altEncoded, img_url) => {
+    document.getElementById('gallery-modal-title').textContent = "Edit Gallery Item";
+    document.getElementById('gallery-item-id').value = id;
+    document.getElementById('gallery-item-category').value = category;
+    document.getElementById('gallery-item-alt').value = decodeURIComponent(altEncoded);
+    document.getElementById('gallery-item-url').value = img_url;
+    document.getElementById('gallery-upload-status').textContent = "No file chosen (keep current image)";
+    document.getElementById('modal-admin-gallery').style.display = 'flex';
+  };
+
+  window.deleteGalleryItem = async (id) => {
+    if (confirm("Are you sure you want to delete this gallery item?")) {
+      await supabase.from('gallery').delete().eq('id', id);
+      loadGalleryItems();
+      renderDynamicContent();
+    }
+  };
+
+  document.getElementById('form-admin-gallery').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const id = document.getElementById('gallery-item-id').value;
+    const category = document.getElementById('gallery-item-category').value;
+    const alt = document.getElementById('gallery-item-alt').value.trim();
+    const img_url = document.getElementById('gallery-item-url').value.trim();
+
+    const payload = { category, alt, img_url };
+
+    if (id) {
+      await supabase.from('gallery').update(payload).eq('id', id);
+    } else {
+      await supabase.from('gallery').insert([payload]);
+    }
+
+    document.getElementById('modal-admin-gallery').style.display = 'none';
+    loadGalleryItems();
+    renderDynamicContent();
+  });
+
+
+  // --- TEAM MODAL EVENTS ---
+  const teamFileInput = document.getElementById('team-file-input');
+  if (teamFileInput) {
+    teamFileInput.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        document.getElementById('team-upload-status').textContent = file.name;
+        uploadToCloudinary(file, document.getElementById('team-upload-status'), document.getElementById('team-member-url'));
+      }
+    });
+  }
+
+  document.getElementById('btn-add-team-item').addEventListener('click', () => {
+    document.getElementById('team-modal-title').textContent = "Add Team Member";
+    document.getElementById('team-member-id').value = "";
+    document.getElementById('form-admin-team').reset();
+    document.getElementById('team-upload-status').textContent = "No file chosen";
+    document.getElementById('modal-admin-team').style.display = 'flex';
+  });
+
+  document.getElementById('btn-cancel-team').addEventListener('click', () => {
+    document.getElementById('modal-admin-team').style.display = 'none';
+  });
+
+  window.editTeamMember = (id, nameEnc, roleEnc, img_url, order) => {
+    document.getElementById('team-modal-title').textContent = "Edit Team Member";
+    document.getElementById('team-member-id').value = id;
+    document.getElementById('team-member-name').value = decodeURIComponent(nameEnc);
+    document.getElementById('team-member-role').value = decodeURIComponent(roleEnc);
+    document.getElementById('team-member-url').value = img_url;
+    document.getElementById('team-member-order').value = order;
+    document.getElementById('team-upload-status').textContent = "No file chosen (keep current photo)";
+    document.getElementById('modal-admin-team').style.display = 'flex';
+  };
+
+  window.deleteTeamMember = async (id) => {
+    if (confirm("Are you sure you want to delete this team member?")) {
+      await supabase.from('team').delete().eq('id', id);
+      loadTeamMembers();
+      renderDynamicContent();
+    }
+  };
+
+  document.getElementById('form-admin-team').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const id = document.getElementById('team-member-id').value;
+    const name = document.getElementById('team-member-name').value.trim();
+    const role = document.getElementById('team-member-role').value.trim();
+    const img_url = document.getElementById('team-member-url').value.trim();
+    const display_order = parseInt(document.getElementById('team-member-order').value, 10) || 0;
+
+    const payload = { name, role, img_url, display_order };
+
+    if (id) {
+      await supabase.from('team').update(payload).eq('id', id);
+    } else {
+      await supabase.from('team').insert([payload]);
+    }
+
+    document.getElementById('modal-admin-team').style.display = 'none';
+    loadTeamMembers();
+    renderDynamicContent();
+  });
+
+
+  // --- BROCHURE SLIDE MODAL EVENTS ---
+  const brochureFileInput = document.getElementById('brochure-file-input');
+  if (brochureFileInput) {
+    brochureFileInput.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        document.getElementById('brochure-upload-status').textContent = file.name;
+        uploadToCloudinary(file, document.getElementById('brochure-upload-status'), document.getElementById('brochure-slide-url'));
+      }
+    });
+  }
+
+  const slideTypeSelect = document.getElementById('brochure-slide-type');
+  if (slideTypeSelect) {
+    slideTypeSelect.addEventListener('change', () => {
+      const type = slideTypeSelect.value;
+      if (type === 'image') {
+        document.getElementById('group-brochure-image').style.display = 'block';
+        document.getElementById('group-brochure-url').style.display = 'block';
+        document.getElementById('group-brochure-specs').style.display = 'none';
+      } else {
+        document.getElementById('group-brochure-image').style.display = 'none';
+        document.getElementById('group-brochure-url').style.display = 'none';
+        document.getElementById('group-brochure-specs').style.display = 'block';
+      }
+    });
+  }
+
+  document.getElementById('btn-add-brochure-item').addEventListener('click', () => {
+    document.getElementById('brochure-modal-title').textContent = "Add Brochure Slide";
+    document.getElementById('brochure-slide-id').value = "";
+    document.getElementById('form-admin-brochure').reset();
+    document.getElementById('brochure-upload-status').textContent = "No file chosen";
+    document.getElementById('group-brochure-image').style.display = 'block';
+    document.getElementById('group-brochure-url').style.display = 'block';
+    document.getElementById('group-brochure-specs').style.display = 'none';
+    document.getElementById('modal-admin-brochure').style.display = 'flex';
+  });
+
+  document.getElementById('btn-cancel-brochure').addEventListener('click', () => {
+    document.getElementById('modal-admin-brochure').style.display = 'none';
+  });
+
+  window.editBrochureSlide = (id, titleEnc, type, img_url, specsEnc, order) => {
+    document.getElementById('brochure-modal-title').textContent = "Edit Brochure Slide";
+    document.getElementById('brochure-slide-id').value = id;
+    document.getElementById('brochure-slide-title').value = decodeURIComponent(titleEnc);
+    document.getElementById('brochure-slide-type').value = type;
+    document.getElementById('brochure-slide-url').value = img_url;
+    document.getElementById('brochure-slide-order').value = order;
+    
+    // Parse specs JSON
+    let parsedSpecs = "";
+    try {
+      const decoded = decodeURIComponent(specsEnc);
+      parsedSpecs = JSON.stringify(JSON.parse(decoded), null, 2);
+    } catch (e) {
+      parsedSpecs = "[]";
+    }
+    document.getElementById('brochure-slide-specs').value = parsedSpecs;
+
+    // Toggle fields based on type
+    if (type === 'image') {
+      document.getElementById('group-brochure-image').style.display = 'block';
+      document.getElementById('group-brochure-url').style.display = 'block';
+      document.getElementById('group-brochure-specs').style.display = 'none';
+      document.getElementById('brochure-upload-status').textContent = "No file chosen (keep current image)";
+    } else {
+      document.getElementById('group-brochure-image').style.display = 'none';
+      document.getElementById('group-brochure-url').style.display = 'none';
+      document.getElementById('group-brochure-specs').style.display = 'block';
+    }
+
+    document.getElementById('modal-admin-brochure').style.display = 'flex';
+  };
+
+  window.deleteBrochureSlide = async (id) => {
+    if (confirm("Are you sure you want to delete this brochure slide?")) {
+      await supabase.from('brochure_slides').delete().eq('id', id);
+      loadBrochureSlides();
+      renderDynamicContent();
+    }
+  };
+
+  document.getElementById('form-admin-brochure').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const id = document.getElementById('brochure-slide-id').value;
+    const title = document.getElementById('brochure-slide-title').value.trim();
+    const type = document.getElementById('brochure-slide-type').value;
+    const img_url = type === 'image' ? document.getElementById('brochure-slide-url').value.trim() : null;
+    const display_order = parseInt(document.getElementById('brochure-slide-order').value, 10) || 0;
+
+    let specs = null;
+    if (type === 'specs') {
+      const rawSpecs = document.getElementById('brochure-slide-specs').value.trim();
+      try {
+        specs = JSON.parse(rawSpecs);
+      } catch (err) {
+        alert("Invalid JSON format for specifications. Please double check the schema syntax.");
+        return;
+      }
+    }
+
+    const payload = { title, type, img_url, specs, display_order };
+
+    if (id) {
+      await supabase.from('brochure_slides').update(payload).eq('id', id);
+    } else {
+      await supabase.from('brochure_slides').insert([payload]);
+    }
+
+    document.getElementById('modal-admin-brochure').style.display = 'none';
+    loadBrochureSlides();
+    renderDynamicContent();
+  });
+
+
+  // ==========================================================================
+  // 19. INITIAL SEED & INITIAL RENDER
+  // ==========================================================================
+  
+  (async function() {
+    await seedDatabaseIfEmpty();
+    await renderDynamicContent();
+  })();
 
 });

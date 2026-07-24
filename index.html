@@ -8,8 +8,12 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-  <!-- FontAwesome Icons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- FontAwesome Icons (Updated to v6.5.2 for fa-x-twitter support) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <!-- Supabase Client JS SDK -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <!-- Client Configuration (Exposing env vars) -->
+  <script src="config.js"></script>
   <!-- Custom CSS -->
   <link rel="stylesheet" href="style.css">
 </head>
@@ -35,12 +39,12 @@
       <nav class="desktop-nav">
         <ul>
           <li><a href="#home" class="nav-link active" data-view="home">HOME</a></li>
-          <li><a href="#about" class="nav-link" data-view="about">ABOUT US</a></li>
+          <li><a href="#about" class="nav-link" data-view="about">ABOUT</a></li>
           <li><a href="#projects" class="nav-link" data-view="projects">PROJECTS</a></li>
           <li><a href="#services" class="nav-link" data-view="services">SERVICES</a></li>
           <li><a href="#brochure" class="nav-link" data-view="brochure">BROCHURE</a></li>
           <li><a href="#gallery" class="nav-link" data-view="gallery">GALLERY</a></li>
-          <li><a href="#contact" class="nav-link" data-view="contact">CONTACT US</a></li>
+          <li><a href="#contact" class="nav-link" data-view="contact">CONTACT</a></li>
         </ul>
       </nav>
 
@@ -66,12 +70,12 @@
     <nav class="mobile-nav-links">
       <ul>
         <li><a href="#home" class="mobile-nav-link active" data-view="home">HOME</a></li>
-        <li><a href="#about" class="mobile-nav-link" data-view="about">ABOUT US</a></li>
+        <li><a href="#about" class="mobile-nav-link" data-view="about">ABOUT</a></li>
         <li><a href="#projects" class="mobile-nav-link" data-view="projects">PROJECTS</a></li>
         <li><a href="#services" class="mobile-nav-link" data-view="services">SERVICES</a></li>
         <li><a href="#brochure" class="mobile-nav-link" data-view="brochure">BROCHURE</a></li>
         <li><a href="#gallery" class="mobile-nav-link" data-view="gallery">GALLERY</a></li>
-        <li><a href="#contact" class="mobile-nav-link" data-view="contact">CONTACT US</a></li>
+        <li><a href="#contact" class="mobile-nav-link" data-view="contact">CONTACT</a></li>
       </ul>
       <div class="mobile-menu-calls-list">
         <a href="tel:+919392168888" class="mobile-menu-call">
@@ -103,7 +107,7 @@
             <p class="hero-desc animated-fade">JESHURUN BUILDER'S & DEVELOPER'S PVT. LTD. is dedicated to creating exceptional residential and commercial spaces through innovative design, quality construction, and timely delivery.</p>
             <div class="hero-buttons">
               <a href="#projects" class="btn btn-primary btn-explore" data-target="projects">EXPLORE PROJECTS <i class="fa-solid fa-arrow-right"></i></a>
-              <a href="#contact" class="btn btn-outline-white btn-contact" data-target="contact">CONTACT US</a>
+              <a href="#contact" class="btn btn-outline-white btn-contact" data-target="contact">CONTACT</a>
             </div>
             <div class="hero-bottom-call">
               <a href="tel:+919392168888"><i class="fa-solid fa-phone"></i> Call Now +91 93921 68888</a>
@@ -116,7 +120,7 @@
             <p class="hero-desc">We combine premium materials, cutting-edge architecture, and sustainable engineering to craft iconic developments that stand the test of time.</p>
             <div class="hero-buttons">
               <a href="#projects" class="btn btn-primary btn-explore" data-target="projects">EXPLORE PROJECTS <i class="fa-solid fa-arrow-right"></i></a>
-              <a href="#contact" class="btn btn-outline-white btn-contact" data-target="contact">CONTACT US</a>
+              <a href="#contact" class="btn btn-outline-white btn-contact" data-target="contact">CONTACT</a>
             </div>
             <div class="hero-bottom-call animate-fade">
               <a href="tel:+919160401212"><i class="fa-solid fa-phone"></i> Call Now +91 91604 01212</a>
@@ -565,12 +569,12 @@
       </section>
     </section>
 
-    <!-- ABOUT US VIEW -->
+    <!-- ABOUT VIEW -->
     <section id="about-view" class="view-section">
       <div class="subpage-banner" style="background-image: linear-gradient(rgba(11, 26, 48, 0.75), rgba(11, 26, 48, 0.8)), url('https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=1200&q=80');">
         <div class="container subpage-banner-content">
-          <span class="subpage-breadcrumbs">Home > About Us</span>
-          <h1>ABOUT US</h1>
+          <span class="subpage-breadcrumbs">Home > About</span>
+          <h1>ABOUT</h1>
           <p>Building spaces. Building trust. Creating a better tomorrow.</p>
         </div>
       </div>
@@ -582,7 +586,7 @@
             <h2 class="section-title">Building Trust Since Day One</h2>
             <p>JESHURUN BUILDER'S & DEVELOPER'S PVT. LTD. is dedicated to creating exceptional residential and commercial spaces through innovative design, quality construction, and timely delivery. We combine expertise, integrity, and modern engineering to build projects that offer lasting value, comfort, and trust for every client.</p>
             <p>We combine technical excellence with transparency, ensuring that every project reflects our promise of a better tomorrow.</p>
-            <button class="btn btn-primary" id="btn-read-more-about">More About Us <i class="fa-solid fa-arrow-right"></i></button>
+            <button class="btn btn-primary" id="btn-read-more-about">More About <i class="fa-solid fa-arrow-right"></i></button>
           </div>
           <div class="story-image-right scroll-trigger right-slide">
             <img src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=800&q=80" alt="Interior lounge area" class="about-story-img rounded">
@@ -682,10 +686,10 @@
               <!-- Manager -->
               <div class="team-card">
                 <div class="team-img-h">
-                  <img src="image copy 42.png" alt="Sudhakar keden">
+                  <img src="image copy 42.png" alt="Sudhaker kedem">
                 </div>
                 <div class="team-body">
-                  <h4>Sudhakar keden</h4>
+                  <h4>Sudhaker kedem</h4>
                   <p>Manager</p>
                 </div>
               </div>
@@ -702,10 +706,10 @@
               <!-- Engineer -->
               <div class="team-card">
                 <div class="team-img-h">
-                  <img src="image copy 43.png" alt="Hammed uddin khan">
+                  <img src="image copy 43.png" alt="Hameed uddin khan">
                 </div>
                 <div class="team-body">
-                  <h4>Hammed uddin khan</h4>
+                  <h4>Hameed uddin khan</h4>
                   <p>Engineer</p>
                 </div>
               </div>
@@ -732,7 +736,7 @@
             <p>Have a project in mind? Get in touch with us today.</p>
           </div>
           <div class="text-right text-center-mobile">
-            <a href="#contact" class="btn btn-primary" data-target="contact">Contact Us <i class="fa-solid fa-arrow-right"></i></a>
+            <a href="#contact" class="btn btn-primary" data-target="contact">Contact <i class="fa-solid fa-arrow-right"></i></a>
           </div>
         </div>
       </section>
@@ -1024,7 +1028,37 @@
         </div>
       </div>
 
-      <div class="brochure-container">
+      <!-- Brochure Authentication Form (Lead Capture) -->
+      <div class="brochure-auth-container" id="brochure-auth-container">
+        <div class="brochure-auth-card">
+          <h3>Unlock Digital Catalogue</h3>
+          <p>Please register to instantly view and download our high-resolution project brochure.</p>
+          <form id="brochure-auth-form" class="brochure-auth-form">
+            <div class="form-group">
+              <label for="lead-name">Full Name</label>
+              <input type="text" id="lead-name" placeholder="Enter your full name" required class="form-input">
+            </div>
+            <div class="form-group">
+              <label for="lead-email">Email Address</label>
+              <input type="email" id="lead-email" placeholder="Enter your email" required class="form-input">
+            </div>
+            <div class="form-group">
+              <label for="lead-phone">Mobile / WhatsApp Number</label>
+              <input type="tel" id="lead-phone" placeholder="Enter your 10-digit mobile number" required class="form-input" pattern="[0-9]{10}">
+            </div>
+            <button type="submit" class="btn btn-primary btn-unlock">ACCESS BROCHURE <i class="fa-solid fa-unlock-keyhole"></i></button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Brochure Catalogue Container (Visible after login) -->
+      <div class="brochure-container" id="brochure-container" style="display: none;">
+        <!-- Download Bar -->
+        <div class="brochure-download-bar" style="margin-bottom: 20px; text-align: center;">
+          <a href="jeshurun_brochure.pdf" download="Jeshurun_Brochure.pdf" class="btn btn-primary btn-download" id="btn-download-pdf">
+            <i class="fa-solid fa-file-pdf"></i> DOWNLOAD PDF BROCHURE
+          </a>
+        </div>
         <!-- Interactive Slide Container -->
         <div class="brochure-slider-wrapper">
           
@@ -1068,11 +1102,11 @@
               <!-- Manager -->
               <div class="brochure-team-card">
                 <div class="brochure-team-img-wrapper">
-                  <img src="image copy 42.png" alt="Sudhakar keden">
+                  <img src="image copy 42.png" alt="Sudhaker kedem">
                 </div>
                 <div class="brochure-team-body">
                   <p><strong>Manager.</strong></p>
-                  <h4>Sudhakar keden</h4>
+                  <h4>Sudhaker kedem</h4>
                 </div>
               </div>
 
@@ -1090,11 +1124,11 @@
               <!-- Engineer -->
               <div class="brochure-team-card">
                 <div class="brochure-team-img-wrapper">
-                  <img src="image copy 43.png" alt="Hammed uddin khan">
+                  <img src="image copy 43.png" alt="Hameed uddin khan">
                 </div>
                 <div class="brochure-team-body">
                   <p><strong>ENGR.</strong></p>
-                  <h4>Hammed uddin khan</h4>
+                  <h4>Hameed uddin khan</h4>
                 </div>
               </div>
 
@@ -1536,12 +1570,12 @@
       </section>
     </section>
 
-    <!-- CONTACT US VIEW -->
+    <!-- CONTACT VIEW -->
     <section id="contact-view" class="view-section">
       <div class="subpage-banner" style="background-image: linear-gradient(rgba(11, 26, 48, 0.75), rgba(11, 26, 48, 0.8)), url('https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&w=1200&q=80');">
         <div class="container subpage-banner-content">
-          <span class="subpage-breadcrumbs">Home > Contact Us</span>
-          <h1>Contact Us</h1>
+          <span class="subpage-breadcrumbs">Home > Contact</span>
+          <h1>Contact</h1>
           <p>We are here to help you build your dream. Get in touch with us today!</p>
         </div>
       </div>
@@ -1658,6 +1692,285 @@
       </section>
     </section>
 
+    <!-- ADMIN VIEW -->
+    <section id="admin-view" class="view-section">
+      <!-- SUBPAGE BANNER -->
+      <div class="subpage-banner" style="background-image: linear-gradient(rgba(11, 26, 48, 0.75), rgba(11, 26, 48, 0.8)), url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1200&q=80');">
+        <div class="container subpage-banner-content">
+          <span class="subpage-breadcrumbs">Home > Admin</span>
+          <h1>Admin Control Panel</h1>
+          <p>Manage website gallery, team, brochure content, and generated leads.</p>
+        </div>
+      </div>
+
+      <!-- Admin Login Gate -->
+      <div class="admin-auth-container" id="admin-auth-container">
+        <div class="admin-auth-card">
+          <h3>Admin Authentication</h3>
+          <p>Please log in with your credentials to access the management panel.</p>
+          <form id="admin-login-form" class="admin-login-form">
+            <div class="form-group">
+              <label for="admin-email">Email Address</label>
+              <input type="email" id="admin-email" placeholder="admin@jeshurun.com" required class="form-input">
+            </div>
+            <div class="form-group">
+              <label for="admin-password">Password</label>
+              <input type="password" id="admin-password" placeholder="••••••••" required class="form-input">
+            </div>
+            <button type="submit" class="btn btn-primary btn-login">LOG IN <i class="fa-solid fa-right-to-bracket"></i></button>
+            <div class="auth-error-msg" id="admin-auth-error" style="color: var(--primary-red); display: none; margin-top: 10px; font-weight: 600;">Invalid email or password.</div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Admin Dashboard Container (Visible after login) -->
+      <div class="admin-dashboard-container" id="admin-dashboard-container" style="display: none;">
+        <div class="container">
+          <div class="admin-header-row">
+            <h2>Welcome, Administrator</h2>
+            <button class="btn btn-outline" id="btn-admin-logout">LOG OUT <i class="fa-solid fa-power-off"></i></button>
+          </div>
+
+          <div class="admin-layout-grid">
+            <!-- Sidebar Navigation Tabs -->
+            <div class="admin-sidebar">
+              <ul>
+                <li><button class="admin-tab-btn active" data-tab="leads-tab"><i class="fa-solid fa-users-rectangle"></i> Leads / Signups</button></li>
+                <li><button class="admin-tab-btn" data-tab="gallery-tab"><i class="fa-solid fa-images"></i> Manage Gallery</button></li>
+                <li><button class="admin-tab-btn" data-tab="team-tab"><i class="fa-solid fa-people-group"></i> Manage Team</button></li>
+                <li><button class="admin-tab-btn" data-tab="brochure-tab"><i class="fa-solid fa-file-invoice"></i> Brochure Specs</button></li>
+              </ul>
+            </div>
+
+            <!-- Content Area Panels -->
+            <div class="admin-content-panel">
+              <!-- LEADS TAB -->
+              <div class="admin-tab-content active" id="leads-tab">
+                <div class="panel-header">
+                  <h3>Leads Generated</h3>
+                  <p>All visitors who registered to view/download the brochure</p>
+                </div>
+                <div class="table-responsive">
+                  <table class="admin-table">
+                    <thead>
+                      <tr>
+                        <th>Date</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>WhatsApp / Mobile</th>
+                        <th>Action</th>
+                      </tr>
+                    </thead>
+                    <tbody id="leads-table-body">
+                      <!-- Populated dynamically -->
+                      <tr><td colspan="5" class="text-center text-muted">Loading leads...</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <!-- GALLERY TAB -->
+              <div class="admin-tab-content" id="gallery-tab">
+                <div class="panel-header">
+                  <h3>Manage Gallery Items</h3>
+                  <button class="btn btn-primary" id="btn-add-gallery-item"><i class="fa-solid fa-plus"></i> Add Gallery Item</button>
+                </div>
+                <div class="table-responsive">
+                  <table class="admin-table">
+                    <thead>
+                      <tr>
+                        <th>Preview</th>
+                        <th>Category</th>
+                        <th>Alt Text</th>
+                        <th>Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody id="gallery-table-body">
+                      <!-- Populated dynamically -->
+                      <tr><td colspan="4" class="text-center text-muted">Loading gallery items...</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <!-- TEAM TAB -->
+              <div class="admin-tab-content" id="team-tab">
+                <div class="panel-header">
+                  <h3>Manage Team Members</h3>
+                  <button class="btn btn-primary" id="btn-add-team-item"><i class="fa-solid fa-plus"></i> Add Team Member</button>
+                </div>
+                <div class="table-responsive">
+                  <table class="admin-table">
+                    <thead>
+                      <tr>
+                        <th>Photo</th>
+                        <th>Name</th>
+                        <th>Role</th>
+                        <th>Order</th>
+                        <th>Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody id="team-table-body">
+                      <!-- Populated dynamically -->
+                      <tr><td colspan="5" class="text-center text-muted">Loading team members...</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <!-- BROCHURE TAB -->
+              <div class="admin-tab-content" id="brochure-tab">
+                <div class="panel-header">
+                  <h3>Manage Brochure Slides</h3>
+                  <button class="btn btn-primary" id="btn-add-brochure-item"><i class="fa-solid fa-plus"></i> Add Brochure Slide</button>
+                </div>
+                <div class="table-responsive">
+                  <table class="admin-table">
+                    <thead>
+                      <tr>
+                        <th>Preview / Type</th>
+                        <th>Slide Title</th>
+                        <th>Order</th>
+                        <th>Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody id="brochure-table-body">
+                      <!-- Populated dynamically -->
+                      <tr><td colspan="4" class="text-center text-muted">Loading brochure slides...</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ADMIN MODALS -->
+      <!-- Gallery Item Modal -->
+      <div class="admin-modal" id="modal-admin-gallery" style="display: none;">
+        <div class="admin-modal-card">
+          <h3 id="gallery-modal-title">Add Gallery Item</h3>
+          <form id="form-admin-gallery">
+            <input type="hidden" id="gallery-item-id">
+            <div class="form-group">
+              <label for="gallery-item-category">Category</label>
+              <select id="gallery-item-category" required class="form-input">
+                <option value="gallery-residential">Residential</option>
+                <option value="gallery-commercial">Commercial</option>
+                <option value="gallery-interior">Interior</option>
+                <option value="gallery-progress">Construction Progress</option>
+                <option value="gallery-completed">Completed Projects</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="gallery-item-alt">Alt Text / Project Name</label>
+              <input type="text" id="gallery-item-alt" placeholder="e.g. Modern Villa Exterior" required class="form-input">
+            </div>
+            <div class="form-group">
+              <label>Image Upload</label>
+              <div class="file-upload-wrapper">
+                <input type="file" id="gallery-file-input" accept="image/*" class="file-input">
+                <div class="file-upload-btn"><i class="fa-solid fa-cloud-arrow-up"></i> Choose Image File</div>
+                <div class="file-upload-status" id="gallery-upload-status">No file chosen</div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="gallery-item-url">Image URL</label>
+              <input type="url" id="gallery-item-url" placeholder="https://example.com/image.jpg" required class="form-input">
+            </div>
+            <div class="modal-actions">
+              <button type="button" class="btn btn-outline" id="btn-cancel-gallery">Cancel</button>
+              <button type="submit" class="btn btn-primary" id="btn-save-gallery">Save Item</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Team Member Modal -->
+      <div class="admin-modal" id="modal-admin-team" style="display: none;">
+        <div class="admin-modal-card">
+          <h3 id="team-modal-title">Add Team Member</h3>
+          <form id="form-admin-team">
+            <input type="hidden" id="team-member-id">
+            <div class="form-group">
+              <label for="team-member-name">Full Name</label>
+              <input type="text" id="team-member-name" placeholder="e.g. Sunil Kumar" required class="form-input">
+            </div>
+            <div class="form-group">
+              <label for="team-member-role">Role / Designation</label>
+              <input type="text" id="team-member-role" placeholder="e.g. Project Director" required class="form-input">
+            </div>
+            <div class="form-group">
+              <label>Photo Upload</label>
+              <div class="file-upload-wrapper">
+                <input type="file" id="team-file-input" accept="image/*" class="file-input">
+                <div class="file-upload-btn"><i class="fa-solid fa-cloud-arrow-up"></i> Choose Photo File</div>
+                <div class="file-upload-status" id="team-upload-status">No file chosen</div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="team-member-url">Photo Image URL</label>
+              <input type="url" id="team-member-url" placeholder="https://example.com/photo.jpg" required class="form-input">
+            </div>
+            <div class="form-group">
+              <label for="team-member-order">Display Order</label>
+              <input type="number" id="team-member-order" value="0" required class="form-input" min="0">
+            </div>
+            <div class="modal-actions">
+              <button type="button" class="btn btn-outline" id="btn-cancel-team">Cancel</button>
+              <button type="submit" class="btn btn-primary" id="btn-save-team">Save Member</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Brochure Slide Modal -->
+      <div class="admin-modal" id="modal-admin-brochure" style="display: none;">
+        <div class="admin-modal-card">
+          <h3 id="brochure-modal-title">Add Brochure Slide</h3>
+          <form id="form-admin-brochure">
+            <input type="hidden" id="brochure-slide-id">
+            <div class="form-group">
+              <label for="brochure-slide-title">Slide Title</label>
+              <input type="text" id="brochure-slide-title" placeholder="e.g. Specifications" required class="form-input">
+            </div>
+            <div class="form-group">
+              <label for="brochure-slide-type">Slide Type</label>
+              <select id="brochure-slide-type" required class="form-input">
+                <option value="image">Image Slide</option>
+                <option value="specs">Specifications Sheet (Bullet Points)</option>
+              </select>
+            </div>
+            <div class="form-group" id="group-brochure-image">
+              <label>Slide Image Upload</label>
+              <div class="file-upload-wrapper">
+                <input type="file" id="brochure-file-input" accept="image/*" class="file-input">
+                <div class="file-upload-btn"><i class="fa-solid fa-cloud-arrow-up"></i> Choose Slide Image</div>
+                <div class="file-upload-status" id="brochure-upload-status">No file chosen</div>
+              </div>
+            </div>
+            <div class="form-group" id="group-brochure-url">
+              <label for="brochure-slide-url">Slide Image URL</label>
+              <input type="url" id="brochure-slide-url" placeholder="https://example.com/slide.jpg" class="form-input">
+            </div>
+            <div class="form-group" id="group-brochure-specs" style="display: none;">
+              <label for="brochure-slide-specs">Specifications JSON (Format: [{"title":"Subheading","items":["bullet1","bullet2"]}])</label>
+              <textarea id="brochure-slide-specs" placeholder='[{"title":"Subheading","items":["bullet1","bullet2"]}]' rows="6" class="form-input"></textarea>
+            </div>
+            <div class="form-group">
+              <label for="brochure-slide-order">Display Order</label>
+              <input type="number" id="brochure-slide-order" value="0" required class="form-input" min="0">
+            </div>
+            <div class="modal-actions">
+              <button type="button" class="btn btn-outline" id="btn-cancel-brochure">Cancel</button>
+              <button type="submit" class="btn btn-primary" id="btn-save-brochure">Save Slide</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+
   </main>
 
   <!-- FOOTER -->
@@ -1667,7 +1980,7 @@
       <div class="footer-brand-col">
         <a href="#home" class="brand-logo" id="footer-logo-link">
           <div class="logo-wrapper">
-            <img src="logo_transparent.png" alt="Jeshurun Logo" class="brand-logo-img">
+            <img src="logo_footer.png" alt="Jeshurun Logo" class="brand-logo-img">
           </div>
           <div class="brand-text">
             <span class="brand-name text-white">JESHURUN</span>
@@ -1686,11 +1999,11 @@
       <div class="footer-links-col">
         <h4>QUICK LINKS</h4>
         <ul>
-          <li><a href="#about" data-target="about">About Us</a></li>
+          <li><a href="#about" data-target="about">About</a></li>
           <li><a href="#projects" data-target="projects">Projects</a></li>
           <li><a href="#services" data-target="services">Services</a></li>
           <li><a href="#gallery" data-target="gallery">Gallery</a></li>
-          <li><a href="#contact" data-target="contact">Contact Us</a></li>
+          <li><a href="#contact" data-target="contact">Contact</a></li>
         </ul>
       </div>
       <!-- Our Services -->
