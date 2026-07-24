@@ -1334,11 +1334,11 @@ document.addEventListener('DOMContentLoaded', () => {
       });
       return `
         <tr>
-          <td>${date}</td>
-          <td><strong>${lead.name}</strong></td>
-          <td>${lead.email}</td>
-          <td>${lead.phone}</td>
-          <td>
+          <td data-label="Date">${date}</td>
+          <td data-label="Name"><strong>${lead.name}</strong></td>
+          <td data-label="Email">${lead.email}</td>
+          <td data-label="WhatsApp / Mobile">${lead.phone}</td>
+          <td data-label="Action">
             <a href="https://wa.me/${lead.phone.replace(/[^0-9]/g, '')}?text=Hello%20${encodeURIComponent(lead.name)},%20thanks%20for%20registering%20with%20Jeshurun%20Builders." 
                target="_blank" class="btn-icon btn-chat-wa">
                <i class="fa-brands fa-whatsapp"></i> Chat
@@ -1362,10 +1362,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     tbody.innerHTML = items.map(item => `
       <tr>
-        <td><img src="${item.img_url}" width="60" height="40" style="object-fit: cover; border-radius: 4px;"></td>
-        <td><span class="gallery-tag">${item.category}</span></td>
-        <td>${item.alt}</td>
-        <td>
+        <td data-label="Preview"><img src="${item.img_url}" width="60" height="40" style="object-fit: cover; border-radius: 4px;"></td>
+        <td data-label="Category"><span class="gallery-tag">${item.category}</span></td>
+        <td data-label="Alt Text">${item.alt}</td>
+        <td data-label="Actions">
           <button class="btn-icon btn-edit" onclick="editGalleryItem(${item.id}, '${item.category}', '${encodeURIComponent(item.alt)}', '${item.img_url}')"><i class="fa-solid fa-pen"></i> Edit</button>
           <button class="btn-icon btn-delete" onclick="deleteGalleryItem(${item.id})"><i class="fa-solid fa-trash"></i> Delete</button>
         </td>
@@ -1386,11 +1386,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     tbody.innerHTML = members.map(m => `
       <tr>
-        <td><img src="${m.img_url}" width="40" height="45" style="object-fit: cover; border-radius: 50%;"></td>
-        <td><strong>${m.name}</strong></td>
-        <td>${m.role}</td>
-        <td>${m.display_order}</td>
-        <td>
+        <td data-label="Photo"><img src="${m.img_url}" width="40" height="45" style="object-fit: cover; border-radius: 50%;"></td>
+        <td data-label="Name"><strong>${m.name}</strong></td>
+        <td data-label="Role">${m.role}</td>
+        <td data-label="Order">${m.display_order}</td>
+        <td data-label="Actions">
           <button class="btn-icon btn-edit" onclick="editTeamMember(${m.id}, '${encodeURIComponent(m.name)}', '${encodeURIComponent(m.role)}', '${m.img_url}', ${m.display_order})"><i class="fa-solid fa-pen"></i> Edit</button>
           <button class="btn-icon btn-delete" onclick="deleteTeamMember(${m.id})"><i class="fa-solid fa-trash"></i> Delete</button>
         </td>
@@ -1411,15 +1411,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     tbody.innerHTML = slides.map(slide => `
       <tr>
-        <td>
+        <td data-label="Slide Graphic">
           ${slide.type === 'image' 
             ? `<img src="${slide.img_url}" width="60" height="40">` 
             : `<span class="gallery-tag" style="background:#0b1a30;color:#fff;">SPECS SHEET</span>`
           }
         </td>
-        <td><strong>${slide.title}</strong></td>
-        <td>${slide.display_order}</td>
-        <td>
+        <td data-label="Title"><strong>${slide.title}</strong></td>
+        <td data-label="Order">${slide.display_order}</td>
+        <td data-label="Actions">
           <button class="btn-icon btn-edit" onclick="editBrochureSlide(${slide.id}, '${encodeURIComponent(slide.title)}', '${slide.type}', '${slide.img_url || ''}', '${encodeURIComponent(JSON.stringify(slide.specs || []))}', ${slide.display_order})"><i class="fa-solid fa-pen"></i> Edit</button>
           <button class="btn-icon btn-delete" onclick="deleteBrochureSlide(${slide.id})"><i class="fa-solid fa-trash"></i> Delete</button>
         </td>

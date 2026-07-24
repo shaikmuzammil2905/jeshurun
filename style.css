@@ -3491,6 +3491,56 @@ select.form-input {
     gap: 15px;
   }
   .admin-content-panel {
-    padding: 20px;
+    padding: 15px 10px;
+  }
+
+  /* Restructure admin tables into stacked cards */
+  .admin-table, 
+  .admin-table thead, 
+  .admin-table tbody, 
+  .admin-table th, 
+  .admin-table td, 
+  .admin-table tr {
+    display: block;
+  }
+
+  .admin-table thead {
+    display: none; /* Hide header */
+  }
+
+  .admin-table tr {
+    background: var(--bg-white);
+    border: 1px solid rgba(11, 26, 48, 0.08);
+    border-radius: 8px;
+    margin-bottom: 15px;
+    padding: 12px;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .admin-table td {
+    border-bottom: 1px solid rgba(11, 26, 48, 0.05);
+    padding: 10px 4px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text-align: right;
+    font-size: 0.82rem;
+  }
+
+  .admin-table td:last-child {
+    border-bottom: none;
+    justify-content: flex-end;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .admin-table td::before {
+    content: attr(data-label);
+    float: left;
+    font-weight: 700;
+    color: var(--secondary-blue);
+    font-family: var(--font-headings);
+    text-align: left;
+    margin-right: 15px;
   }
 }
