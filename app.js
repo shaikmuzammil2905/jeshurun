@@ -1081,17 +1081,15 @@ document.addEventListener('DOMContentLoaded', () => {
           if (slide.type === 'image') {
             slideHtml = `
               <div class="brochure-slide ${isActive}">
-                <img src="${slide.img_url}" alt="${slide.title}" class="brochure-cover-img">
+                <img src="${slide.img_url}" alt="${slide.title}" class="brochure-img-fit animated-fit-in">
               </div>
             `;
           } else if (slide.title === 'Management Team') {
             slideHtml = `
-              <div class="brochure-slide ${isActive}">
-                <div class="brochure-slide-inner">
-                  <h3>${slide.title}</h3>
-                  <div class="brochure-team-grid">
-                    <!-- Rendered dynamically above -->
-                  </div>
+              <div class="brochure-slide brochure-team-slide ${isActive}">
+                <h2 class="brochure-team-title">${slide.title}</h2>
+                <div class="brochure-team-grid">
+                  <!-- Rendered dynamically above -->
                 </div>
               </div>
             `;
@@ -1105,21 +1103,22 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             const specCols = specsData.map(col => `
-              <div class="brochure-spec-col">
-                <h4>${col.title}</h4>
-                <ul>
+              <div class="brochure-spec-box">
+                <h3>${col.title}</h3>
+                <ul class="brochure-spec-list">
                   ${col.items.map(item => `<li>${item}</li>`).join('')}
                 </ul>
               </div>
             `).join('');
 
             slideHtml = `
-              <div class="brochure-slide ${isActive}">
-                <div class="brochure-slide-inner">
-                  <h3>${slide.title}</h3>
-                  <div class="brochure-spec-grid">
-                    ${specCols}
-                  </div>
+              <div class="brochure-slide brochure-spec-slide ${isActive}">
+                <div class="brochure-spec-header">
+                  <h2>${slide.title}</h2>
+                  <p>Specifications Overview</p>
+                </div>
+                <div class="brochure-spec-grid">
+                  ${specCols}
                 </div>
               </div>
             `;
