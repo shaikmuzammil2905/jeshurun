@@ -894,7 +894,7 @@ document.addEventListener('DOMContentLoaded', () => {
     { name: 'G. PRASAD', role: 'MD / Founder', img_url: 'image copy 25.png', display_order: 1 },
     { name: 'Sunil kumar pournal', role: 'Director', img_url: 'image copy 41.png', display_order: 2 },
     { name: 'Sudhaker kedem', role: 'Manager', img_url: 'image copy 42.png', display_order: 3 },
-    { name: 'N. GAJU', role: 'Architect', img_url: 'image copy 44.png', display_order: 4 },
+    { name: 'N. RAJU', role: 'Architect', img_url: 'image copy 44.png', display_order: 4 },
     { name: 'Hameed uddin khan', role: 'Engineer', img_url: 'image copy 43.png', display_order: 5 },
     { name: 'Sai Ganesh', role: 'Supervisor', img_url: 'image copy 45.png', display_order: 6 }
   ];
