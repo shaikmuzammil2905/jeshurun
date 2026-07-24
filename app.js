@@ -902,29 +902,30 @@ document.addEventListener('DOMContentLoaded', () => {
   const DEFAULT_BROCHURE_SLIDES = [
     { title: 'Cover', type: 'image', img_url: 'image copy 22.png', specs: null, display_order: 1 },
     { title: 'Intro', type: 'image', img_url: 'image copy 23.png', specs: null, display_order: 2 },
-    { title: 'Management Team', type: 'specs', img_url: null, specs: [], display_order: 3 },
+    { title: 'Management Team Page 1', type: 'image', img_url: 'image copy 70.png', specs: null, display_order: 3 },
+    { title: 'Management Team Page 2', type: 'image', img_url: 'image copy 71.png', specs: null, display_order: 4 },
     { title: 'JDA Introduction', type: 'specs', img_url: null, specs: [
       { title: 'Agreement Concept', items: ['A Joint Development Agreement (JDA) divides land value and construction costs to give both parties equal returns.', 'The catalogue details area sharing (splitting the built-up flats/villas), baseline specifications, and developer timeline in exchange for land.'] },
       { title: 'The Division of Space', items: ['Residential Apartments: Developer designs multi-story/gated community. Flats are divided equally (e.g. builder takes floors 1 & 2, owner takes 3 & 4) with Undivided Share of Land (UDS).', 'Parking & Common Amenities: Basement/stilt parking slots distributed equally.', 'Terrace Rights: Split equally.'] },
       { title: 'Initial Soil & Site Preparation', items: ['Earth excavation.', 'Soil investigation & testing by an NABL-certified lab.', 'Site survey before marking: levels studied, reference coordinates and grids marked.', 'Pillar and column marking based on soil conditions and foundation plan.'] }
-    ], display_order: 4 },
+    ], display_order: 5 },
     { title: 'Core Specifications & Civil Works', type: 'specs', img_url: null, specs: [
       { title: 'RCC Structure', items: ['RCC (Reinforced cement concrete) design integrates steel reinforcement for footings, beams, columns, and slabs as per design.', 'RCC staircase with 6" thickness soffit slab.', 'JSW steel rods used as per structural design.', 'Ultra tech 53 grade cement for slabs, columns, beams; Birla 43 grade for brickwork/plastering.', `Ceiling height 10'5" (slab to slab top).`, `Plinth beam max 2' height from natural ground level.`, 'Sunken slabs for toilets.'] },
       { title: 'Super Structure & Plastering', items: ['Red mud bricks in cement mortar for wall support (external walls 9", internal walls 4.5" with concrete bed).', 'Install chicken mesh (200-300mm wide) over joints before plastering.', 'Double-coat external plastering 18mm thick; internal plastering 12mm thick.'] }
-    ], display_order: 5 },
+    ], display_order: 6 },
     { title: 'Doors, Windows & Flooring', type: 'specs', img_url: null, specs: [
       { title: 'Doors & Frames', items: ['Main door frame BT teak section (5"x7") with teak veneer shutter (36mm or 42mm).', 'Godrej locks, hinges 5" long, 12" brass doorset.', `Main door size 5' width, 7' height.`, 'Internal door frames MT section (4"x3") with laminate-finished flush shutters (32mm).', 'WPC frames and doors (30mm) for washrooms.', `Bedroom doors 3' width, 6'5" height. Washroom doors 3' width, 6'5" height.`] },
       { title: 'Windows & Flooring', items: ['Windows UPVC Vaka, Domal or equivalent with sliding 3-track design and SS mosquito mesh.', 'Ventilators UPVC frame with glass louvres (16"x20") fixed at beam bottom.', 'All internal flooring vitrified tiles (Kajaria/Johnson). Staircase with lapatra black/brown granite. Parking with rough granite.'] }
-    ], display_order: 6 },
+    ], display_order: 7 },
     { title: 'Kitchen, Toilet & Plumbing Lines', type: 'specs', img_url: null, specs: [
       { title: 'Kitchen & Toilet Setup', items: ['Elephant black granite platform with sink & tap.', 'Ceramic tile cladding up to 2 feet height over kitchen platform.', 'Ashirvad CPVC water supply pipes; Sudhakar PVC drainage pipes.', `Toilet flooring with anti-skid ceramic tiles (1'x1').`, `Wall ceramic tiles up to lintel level (1'x2').`, 'Dr. Fixit/Fosroc waterproofing in washrooms, utility and terrace.'] },
       { title: 'Drainage & Sanitaryware', items: ['Sanitaryware: Hindware, Parryware or Cera.', 'EWC wall mounted with PVC cistern. Health faucet, wash basin with countertop.', 'Bib cock with nozzle for washing machine. Angle cocks for geyser, kitchen, etc.'] }
-    ], display_order: 7 },
+    ], display_order: 8 },
     { title: 'Finishes, Electrical & Services', type: 'specs', img_url: null, specs: [
       { title: 'Railing, Painting & Polish', items: ['Glass railing 10mm to 12mm toughened glass with SS 304 supports.', 'MS sliding gate with panel locks. MS safety grills for windows.', 'Interior: 2 coats putty, 1 coat primer, 2 coats Premium Emulsion.', 'Exterior: Weather-proof exterior paints.', 'Water supply: Borewell and municipal water sump tank (10000L).'] },
       { title: 'Electrical & Lift Operations', items: ['Concealed conduit copper wiring (PolyCab/Finolex, Sudhakar pipes).', 'Modular switches (GM, Legrand or Anchor Roma). DB with MCB of Legrand.', 'AC points in bedrooms & hall; geyser points in toilets.', 'Lift planning and installation solutions compliant with industry standards.'] }
-    ], display_order: 8 },
-    { title: 'Closing', type: 'image', img_url: 'image copy 26.png', specs: null, display_order: 9 }
+    ], display_order: 9 },
+    { title: 'Closing', type: 'image', img_url: 'image copy 26.png', specs: null, display_order: 10 }
   ];
 
   async function seedDatabaseIfEmpty() {
