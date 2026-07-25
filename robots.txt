@@ -1,0 +1,8 @@
+# robots.txt for Jeshurun Builder's & Developer's Pvt. Ltd.
+User-agent: *
+Allow: /
+
+# Disallow admin redirect area to avoid crawl noise
+Disallow: /admin/
+
+Sitemap: https://jeshurunbuilders.com/sitemap.xml
