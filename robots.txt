@@ -5,4 +5,4 @@ Allow: /
 # Disallow admin redirect area to avoid crawl noise
 Disallow: /admin/
 
-Sitemap: https://jeshurunbuilders.com/sitemap.xml
+Sitemap: https://jeshurunpvtltd.com/sitemap.xml
