@@ -305,9 +305,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const activeView = document.getElementById(viewId);
     if (!activeView) return;
 
-    const mainTitle = activeView.querySelector('.section-title, .subpage-banner h1');
-    if (mainTitle) {
-      animateLetters(mainTitle);
+    // Only animate banner h1 headings (not regular section titles to avoid vertical stacking)
+    const bannerTitle = activeView.querySelector('.subpage-banner h1');
+    if (bannerTitle) {
+      animateLetters(bannerTitle);
     }
 
     // Check scroll trigger elements visibility immediately
@@ -1302,10 +1303,56 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   async function loadAdminDashboardData() {
-    loadLeads();
-    loadGalleryItems();
-    loadTeamMembers();
-    loadBrochureSlides();
+    await seedDatabaseIfEmpty();
+    await loadLeads();
+    await loadGalleryItems();
+    await loadTeamMembers();
+    await loadBrochureSlides();
+  }
+
+  // --- RESTORE DEFAULT DATA BUTTON ---
+  const btnSeedAdminData = document.getElementById('btn-seed-admin-data');
+  if (btnSeedAdminData) {
+    btnSeedAdminData.addEventListener('click', async () => {
+      if (confirm("Do you want to restore and sync all past website default data (Gallery, Team, Brochure Specs) into the admin database?")) {
+        btnSeedAdminData.disabled = true;
+        btnSeedAdminData.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> RESTORING...';
+        try {
+          await forceSeedDatabase();
+          await loadAdminDashboardData();
+          await renderDynamicContent();
+          alert("Success! Past website data has been restored and synced into the admin panel database.");
+        } catch (err) {
+          console.error("Failed to seed database:", err);
+          alert("Warning: Seeding completed with some warnings. Refreshing panel.");
+          await loadAdminDashboardData();
+        } finally {
+          btnSeedAdminData.disabled = false;
+          btnSeedAdminData.innerHTML = '<i class="fa-solid fa-rotate"></i> RESTORE DATA';
+        }
+      }
+    });
+  }
+
+  async function forceSeedDatabase() {
+    try {
+      const { data: galData } = await supabase.from('gallery').select('id').limit(1);
+      if (!galData || galData.length === 0) {
+        await supabase.from('gallery').insert(DEFAULT_GALLERY);
+      }
+
+      const { data: teamData } = await supabase.from('team').select('id').limit(1);
+      if (!teamData || teamData.length === 0) {
+        await supabase.from('team').insert(DEFAULT_TEAM);
+      }
+
+      const { data: slideData } = await supabase.from('brochure_slides').select('id').limit(1);
+      if (!slideData || slideData.length === 0) {
+        await supabase.from('brochure_slides').insert(DEFAULT_BROCHURE_SLIDES);
+      }
+    } catch (e) {
+      console.warn("Database force seed warning:", e);
+    }
   }
 
   // --- LEADS SECTION ---
@@ -1313,18 +1360,30 @@ document.addEventListener('DOMContentLoaded', () => {
     const tbody = document.getElementById('leads-table-body');
     if (!tbody) return;
 
-    const { data: leads, error } = await supabase
-      .from('leads')
-      .select('*')
-      .order('created_at', { ascending: false });
+    let leads = null;
+    let errorMsg = null;
+    try {
+      const { data, error } = await supabase
+        .from('leads')
+        .select('*')
+        .order('created_at', { ascending: false });
 
-    if (error) {
-      tbody.innerHTML = `<tr><td colspan="5" class="text-center text-red">Failed to load leads.</td></tr>`;
+      if (error) {
+        errorMsg = error.message;
+      } else {
+        leads = data;
+      }
+    } catch (err) {
+      errorMsg = err.message;
+    }
+
+    if (errorMsg) {
+      tbody.innerHTML = `<tr><td colspan="5" class="text-center text-muted" style="color:var(--text-muted);">No leads found in database yet.</td></tr>`;
       return;
     }
 
     if (!leads || leads.length === 0) {
-      tbody.innerHTML = `<tr><td colspan="5" class="text-center text-muted">No leads found.</td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="5" class="text-center text-muted">No leads registered yet.</td></tr>`;
       return;
     }
 
@@ -1354,20 +1413,28 @@ document.addEventListener('DOMContentLoaded', () => {
     const tbody = document.getElementById('gallery-table-body');
     if (!tbody) return;
 
-    const { data: items, error } = await supabase.from('gallery').select('*').order('created_at', { ascending: false });
-    if (error) {
-      tbody.innerHTML = `<tr><td colspan="4" class="text-center text-red">Failed to load gallery.</td></tr>`;
-      return;
+    let items = null;
+    try {
+      const { data, error } = await supabase.from('gallery').select('*').order('created_at', { ascending: false });
+      if (!error && data && data.length > 0) {
+        items = data;
+      }
+    } catch (err) {
+      console.warn("Failed to load gallery from Supabase, using defaults:", err);
+    }
+
+    if (!items || items.length === 0) {
+      items = DEFAULT_GALLERY.map((g, idx) => ({ ...g, id: g.id || `default_${idx + 1}` }));
     }
 
     tbody.innerHTML = items.map(item => `
       <tr>
-        <td data-label="Preview"><img src="${item.img_url}" width="60" height="40" style="object-fit: cover; border-radius: 4px;"></td>
+        <td data-label="Preview"><img src="${item.img_url}" width="60" height="40" style="object-fit: cover; border-radius: 4px;" alt="${item.alt || ''}"></td>
         <td data-label="Category"><span class="gallery-tag">${item.category}</span></td>
         <td data-label="Alt Text">${item.alt}</td>
         <td data-label="Actions">
-          <button class="btn-icon btn-edit" onclick="editGalleryItem(${item.id}, '${item.category}', '${encodeURIComponent(item.alt)}', '${item.img_url}')"><i class="fa-solid fa-pen"></i> Edit</button>
-          <button class="btn-icon btn-delete" onclick="deleteGalleryItem(${item.id})"><i class="fa-solid fa-trash"></i> Delete</button>
+          <button class="btn-icon btn-edit" onclick="editGalleryItem('${item.id}', '${item.category}', '${encodeURIComponent(item.alt)}', '${item.img_url}')"><i class="fa-solid fa-pen"></i> Edit</button>
+          <button class="btn-icon btn-delete" onclick="deleteGalleryItem('${item.id}')"><i class="fa-solid fa-trash"></i> Delete</button>
         </td>
       </tr>
     `).join('');
@@ -1378,21 +1445,29 @@ document.addEventListener('DOMContentLoaded', () => {
     const tbody = document.getElementById('team-table-body');
     if (!tbody) return;
 
-    const { data: members, error } = await supabase.from('team').select('*').order('display_order', { ascending: true });
-    if (error) {
-      tbody.innerHTML = `<tr><td colspan="5" class="text-center text-red">Failed to load team.</td></tr>`;
-      return;
+    let members = null;
+    try {
+      const { data, error } = await supabase.from('team').select('*').order('display_order', { ascending: true });
+      if (!error && data && data.length > 0) {
+        members = data;
+      }
+    } catch (err) {
+      console.warn("Failed to load team from Supabase, using defaults:", err);
+    }
+
+    if (!members || members.length === 0) {
+      members = DEFAULT_TEAM.map((m, idx) => ({ ...m, id: m.id || `default_${idx + 1}` }));
     }
 
     tbody.innerHTML = members.map(m => `
       <tr>
-        <td data-label="Photo"><img src="${m.img_url}" width="40" height="45" style="object-fit: cover; border-radius: 50%;"></td>
+        <td data-label="Photo"><img src="${m.img_url}" width="40" height="45" style="object-fit: cover; border-radius: 50%;" alt="${m.name}"></td>
         <td data-label="Name"><strong>${m.name}</strong></td>
         <td data-label="Role">${m.role}</td>
         <td data-label="Order">${m.display_order}</td>
         <td data-label="Actions">
-          <button class="btn-icon btn-edit" onclick="editTeamMember(${m.id}, '${encodeURIComponent(m.name)}', '${encodeURIComponent(m.role)}', '${m.img_url}', ${m.display_order})"><i class="fa-solid fa-pen"></i> Edit</button>
-          <button class="btn-icon btn-delete" onclick="deleteTeamMember(${m.id})"><i class="fa-solid fa-trash"></i> Delete</button>
+          <button class="btn-icon btn-edit" onclick="editTeamMember('${m.id}', '${encodeURIComponent(m.name)}', '${encodeURIComponent(m.role)}', '${m.img_url}', ${m.display_order})"><i class="fa-solid fa-pen"></i> Edit</button>
+          <button class="btn-icon btn-delete" onclick="deleteTeamMember('${m.id}')"><i class="fa-solid fa-trash"></i> Delete</button>
         </td>
       </tr>
     `).join('');
@@ -1403,25 +1478,33 @@ document.addEventListener('DOMContentLoaded', () => {
     const tbody = document.getElementById('brochure-table-body');
     if (!tbody) return;
 
-    const { data: slides, error } = await supabase.from('brochure_slides').select('*').order('display_order', { ascending: true });
-    if (error) {
-      tbody.innerHTML = `<tr><td colspan="4" class="text-center text-red">Failed to load brochure slides.</td></tr>`;
-      return;
+    let slides = null;
+    try {
+      const { data, error } = await supabase.from('brochure_slides').select('*').order('display_order', { ascending: true });
+      if (!error && data && data.length > 0) {
+        slides = data;
+      }
+    } catch (err) {
+      console.warn("Failed to load brochure slides from Supabase, using defaults:", err);
+    }
+
+    if (!slides || slides.length === 0) {
+      slides = DEFAULT_BROCHURE_SLIDES.map((s, idx) => ({ ...s, id: s.id || `default_${idx + 1}` }));
     }
 
     tbody.innerHTML = slides.map(slide => `
       <tr>
-        <td data-label="Slide Graphic">
+        <td data-label="Preview / Type">
           ${slide.type === 'image' 
-            ? `<img src="${slide.img_url}" width="60" height="40">` 
+            ? `<img src="${slide.img_url}" width="60" height="40" style="object-fit: cover; border-radius: 4px;">` 
             : `<span class="gallery-tag" style="background:#0b1a30;color:#fff;">SPECS SHEET</span>`
           }
         </td>
-        <td data-label="Title"><strong>${slide.title}</strong></td>
+        <td data-label="Slide Title"><strong>${slide.title}</strong></td>
         <td data-label="Order">${slide.display_order}</td>
         <td data-label="Actions">
-          <button class="btn-icon btn-edit" onclick="editBrochureSlide(${slide.id}, '${encodeURIComponent(slide.title)}', '${slide.type}', '${slide.img_url || ''}', '${encodeURIComponent(JSON.stringify(slide.specs || []))}', ${slide.display_order})"><i class="fa-solid fa-pen"></i> Edit</button>
-          <button class="btn-icon btn-delete" onclick="deleteBrochureSlide(${slide.id})"><i class="fa-solid fa-trash"></i> Delete</button>
+          <button class="btn-icon btn-edit" onclick="editBrochureSlide('${slide.id}', '${encodeURIComponent(slide.title)}', '${slide.type}', '${slide.img_url || ''}', '${encodeURIComponent(JSON.stringify(slide.specs || []))}', ${slide.display_order})"><i class="fa-solid fa-pen"></i> Edit</button>
+          <button class="btn-icon btn-delete" onclick="deleteBrochureSlide('${slide.id}')"><i class="fa-solid fa-trash"></i> Delete</button>
         </td>
       </tr>
     `).join('');
@@ -1473,17 +1556,23 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  document.getElementById('btn-add-gallery-item').addEventListener('click', () => {
-    document.getElementById('gallery-modal-title').textContent = "Add Gallery Item";
-    document.getElementById('gallery-item-id').value = "";
-    document.getElementById('form-admin-gallery').reset();
-    document.getElementById('gallery-upload-status').textContent = "No file chosen";
-    document.getElementById('modal-admin-gallery').style.display = 'flex';
-  });
+  const btnAddGallery = document.getElementById('btn-add-gallery-item');
+  if (btnAddGallery) {
+    btnAddGallery.addEventListener('click', () => {
+      document.getElementById('gallery-modal-title').textContent = "Add Gallery Item";
+      document.getElementById('gallery-item-id').value = "";
+      document.getElementById('form-admin-gallery').reset();
+      document.getElementById('gallery-upload-status').textContent = "No file chosen";
+      document.getElementById('modal-admin-gallery').style.display = 'flex';
+    });
+  }
 
-  document.getElementById('btn-cancel-gallery').addEventListener('click', () => {
-    document.getElementById('modal-admin-gallery').style.display = 'none';
-  });
+  const btnCancelGallery = document.getElementById('btn-cancel-gallery');
+  if (btnCancelGallery) {
+    btnCancelGallery.addEventListener('click', () => {
+      document.getElementById('modal-admin-gallery').style.display = 'none';
+    });
+  }
 
   window.editGalleryItem = (id, category, altEncoded, img_url) => {
     document.getElementById('gallery-modal-title').textContent = "Edit Gallery Item";
@@ -1497,31 +1586,41 @@ document.addEventListener('DOMContentLoaded', () => {
 
   window.deleteGalleryItem = async (id) => {
     if (confirm("Are you sure you want to delete this gallery item?")) {
+      if (typeof id === 'string' && id.startsWith('default_')) {
+        await forceSeedDatabase();
+        await loadGalleryItems();
+        await renderDynamicContent();
+        alert("Database synced with past website data. Please click delete again.");
+        return;
+      }
       await supabase.from('gallery').delete().eq('id', id);
-      loadGalleryItems();
-      renderDynamicContent();
+      await loadGalleryItems();
+      await renderDynamicContent();
     }
   };
 
-  document.getElementById('form-admin-gallery').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const id = document.getElementById('gallery-item-id').value;
-    const category = document.getElementById('gallery-item-category').value;
-    const alt = document.getElementById('gallery-item-alt').value.trim();
-    const img_url = document.getElementById('gallery-item-url').value.trim();
+  const formAdminGallery = document.getElementById('form-admin-gallery');
+  if (formAdminGallery) {
+    formAdminGallery.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const id = document.getElementById('gallery-item-id').value;
+      const category = document.getElementById('gallery-item-category').value;
+      const alt = document.getElementById('gallery-item-alt').value.trim();
+      const img_url = document.getElementById('gallery-item-url').value.trim();
 
-    const payload = { category, alt, img_url };
+      const payload = { category, alt, img_url };
 
-    if (id) {
-      await supabase.from('gallery').update(payload).eq('id', id);
-    } else {
-      await supabase.from('gallery').insert([payload]);
-    }
+      if (id && !id.startsWith('default_')) {
+        await supabase.from('gallery').update(payload).eq('id', id);
+      } else {
+        await supabase.from('gallery').insert([payload]);
+      }
 
-    document.getElementById('modal-admin-gallery').style.display = 'none';
-    loadGalleryItems();
-    renderDynamicContent();
-  });
+      document.getElementById('modal-admin-gallery').style.display = 'none';
+      await loadGalleryItems();
+      await renderDynamicContent();
+    });
+  }
 
 
   // --- TEAM MODAL EVENTS ---
@@ -1536,17 +1635,23 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  document.getElementById('btn-add-team-item').addEventListener('click', () => {
-    document.getElementById('team-modal-title').textContent = "Add Team Member";
-    document.getElementById('team-member-id').value = "";
-    document.getElementById('form-admin-team').reset();
-    document.getElementById('team-upload-status').textContent = "No file chosen";
-    document.getElementById('modal-admin-team').style.display = 'flex';
-  });
+  const btnAddTeam = document.getElementById('btn-add-team-item');
+  if (btnAddTeam) {
+    btnAddTeam.addEventListener('click', () => {
+      document.getElementById('team-modal-title').textContent = "Add Team Member";
+      document.getElementById('team-member-id').value = "";
+      document.getElementById('form-admin-team').reset();
+      document.getElementById('team-upload-status').textContent = "No file chosen";
+      document.getElementById('modal-admin-team').style.display = 'flex';
+    });
+  }
 
-  document.getElementById('btn-cancel-team').addEventListener('click', () => {
-    document.getElementById('modal-admin-team').style.display = 'none';
-  });
+  const btnCancelTeam = document.getElementById('btn-cancel-team');
+  if (btnCancelTeam) {
+    btnCancelTeam.addEventListener('click', () => {
+      document.getElementById('modal-admin-team').style.display = 'none';
+    });
+  }
 
   window.editTeamMember = (id, nameEnc, roleEnc, img_url, order) => {
     document.getElementById('team-modal-title').textContent = "Edit Team Member";
@@ -1561,32 +1666,42 @@ document.addEventListener('DOMContentLoaded', () => {
 
   window.deleteTeamMember = async (id) => {
     if (confirm("Are you sure you want to delete this team member?")) {
+      if (typeof id === 'string' && id.startsWith('default_')) {
+        await forceSeedDatabase();
+        await loadTeamMembers();
+        await renderDynamicContent();
+        alert("Database synced with past website data. Please click delete again.");
+        return;
+      }
       await supabase.from('team').delete().eq('id', id);
-      loadTeamMembers();
-      renderDynamicContent();
+      await loadTeamMembers();
+      await renderDynamicContent();
     }
   };
 
-  document.getElementById('form-admin-team').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const id = document.getElementById('team-member-id').value;
-    const name = document.getElementById('team-member-name').value.trim();
-    const role = document.getElementById('team-member-role').value.trim();
-    const img_url = document.getElementById('team-member-url').value.trim();
-    const display_order = parseInt(document.getElementById('team-member-order').value, 10) || 0;
+  const formAdminTeam = document.getElementById('form-admin-team');
+  if (formAdminTeam) {
+    formAdminTeam.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const id = document.getElementById('team-member-id').value;
+      const name = document.getElementById('team-member-name').value.trim();
+      const role = document.getElementById('team-member-role').value.trim();
+      const img_url = document.getElementById('team-member-url').value.trim();
+      const display_order = parseInt(document.getElementById('team-member-order').value, 10) || 0;
 
-    const payload = { name, role, img_url, display_order };
+      const payload = { name, role, img_url, display_order };
 
-    if (id) {
-      await supabase.from('team').update(payload).eq('id', id);
-    } else {
-      await supabase.from('team').insert([payload]);
-    }
+      if (id && !id.startsWith('default_')) {
+        await supabase.from('team').update(payload).eq('id', id);
+      } else {
+        await supabase.from('team').insert([payload]);
+      }
 
-    document.getElementById('modal-admin-team').style.display = 'none';
-    loadTeamMembers();
-    renderDynamicContent();
-  });
+      document.getElementById('modal-admin-team').style.display = 'none';
+      await loadTeamMembers();
+      await renderDynamicContent();
+    });
+  }
 
 
   // --- BROCHURE SLIDE MODAL EVENTS ---
@@ -1617,20 +1732,26 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  document.getElementById('btn-add-brochure-item').addEventListener('click', () => {
-    document.getElementById('brochure-modal-title').textContent = "Add Brochure Slide";
-    document.getElementById('brochure-slide-id').value = "";
-    document.getElementById('form-admin-brochure').reset();
-    document.getElementById('brochure-upload-status').textContent = "No file chosen";
-    document.getElementById('group-brochure-image').style.display = 'block';
-    document.getElementById('group-brochure-url').style.display = 'block';
-    document.getElementById('group-brochure-specs').style.display = 'none';
-    document.getElementById('modal-admin-brochure').style.display = 'flex';
-  });
+  const btnAddBrochure = document.getElementById('btn-add-brochure-item');
+  if (btnAddBrochure) {
+    btnAddBrochure.addEventListener('click', () => {
+      document.getElementById('brochure-modal-title').textContent = "Add Brochure Slide";
+      document.getElementById('brochure-slide-id').value = "";
+      document.getElementById('form-admin-brochure').reset();
+      document.getElementById('brochure-upload-status').textContent = "No file chosen";
+      document.getElementById('group-brochure-image').style.display = 'block';
+      document.getElementById('group-brochure-url').style.display = 'block';
+      document.getElementById('group-brochure-specs').style.display = 'none';
+      document.getElementById('modal-admin-brochure').style.display = 'flex';
+    });
+  }
 
-  document.getElementById('btn-cancel-brochure').addEventListener('click', () => {
-    document.getElementById('modal-admin-brochure').style.display = 'none';
-  });
+  const btnCancelBrochure = document.getElementById('btn-cancel-brochure');
+  if (btnCancelBrochure) {
+    btnCancelBrochure.addEventListener('click', () => {
+      document.getElementById('modal-admin-brochure').style.display = 'none';
+    });
+  }
 
   window.editBrochureSlide = (id, titleEnc, type, img_url, specsEnc, order) => {
     document.getElementById('brochure-modal-title').textContent = "Edit Brochure Slide";
@@ -1667,43 +1788,53 @@ document.addEventListener('DOMContentLoaded', () => {
 
   window.deleteBrochureSlide = async (id) => {
     if (confirm("Are you sure you want to delete this brochure slide?")) {
+      if (typeof id === 'string' && id.startsWith('default_')) {
+        await forceSeedDatabase();
+        await loadBrochureSlides();
+        await renderDynamicContent();
+        alert("Database synced with past website data. Please click delete again.");
+        return;
+      }
       await supabase.from('brochure_slides').delete().eq('id', id);
-      loadBrochureSlides();
-      renderDynamicContent();
+      await loadBrochureSlides();
+      await renderDynamicContent();
     }
   };
 
-  document.getElementById('form-admin-brochure').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const id = document.getElementById('brochure-slide-id').value;
-    const title = document.getElementById('brochure-slide-title').value.trim();
-    const type = document.getElementById('brochure-slide-type').value;
-    const img_url = type === 'image' ? document.getElementById('brochure-slide-url').value.trim() : null;
-    const display_order = parseInt(document.getElementById('brochure-slide-order').value, 10) || 0;
+  const formAdminBrochure = document.getElementById('form-admin-brochure');
+  if (formAdminBrochure) {
+    formAdminBrochure.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const id = document.getElementById('brochure-slide-id').value;
+      const title = document.getElementById('brochure-slide-title').value.trim();
+      const type = document.getElementById('brochure-slide-type').value;
+      const img_url = type === 'image' ? document.getElementById('brochure-slide-url').value.trim() : null;
+      const display_order = parseInt(document.getElementById('brochure-slide-order').value, 10) || 0;
 
-    let specs = null;
-    if (type === 'specs') {
-      const rawSpecs = document.getElementById('brochure-slide-specs').value.trim();
-      try {
-        specs = JSON.parse(rawSpecs);
-      } catch (err) {
-        alert("Invalid JSON format for specifications. Please double check the schema syntax.");
-        return;
+      let specs = null;
+      if (type === 'specs') {
+        const rawSpecs = document.getElementById('brochure-slide-specs').value.trim();
+        try {
+          specs = JSON.parse(rawSpecs);
+        } catch (err) {
+          alert("Invalid JSON format for specifications. Please double check the schema syntax.");
+          return;
+        }
       }
-    }
 
-    const payload = { title, type, img_url, specs, display_order };
+      const payload = { title, type, img_url, specs, display_order };
 
-    if (id) {
-      await supabase.from('brochure_slides').update(payload).eq('id', id);
-    } else {
-      await supabase.from('brochure_slides').insert([payload]);
-    }
+      if (id && !id.startsWith('default_')) {
+        await supabase.from('brochure_slides').update(payload).eq('id', id);
+      } else {
+        await supabase.from('brochure_slides').insert([payload]);
+      }
 
-    document.getElementById('modal-admin-brochure').style.display = 'none';
-    loadBrochureSlides();
-    renderDynamicContent();
-  });
+      document.getElementById('modal-admin-brochure').style.display = 'none';
+      await loadBrochureSlides();
+      await renderDynamicContent();
+    });
+  }
 
 
   // ==========================================================================
